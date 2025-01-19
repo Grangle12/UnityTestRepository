@@ -1,0 +1,1 @@
+{"goldAmount":0,"carPosition":{"x":1.3020819425582886,"y":1.2020820379257203,"z":0.0},"carMovement":{"instanceID":0}}

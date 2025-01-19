@@ -5,13 +5,22 @@ using UnityEngine;
 
 public class GameHandler : MonoBehaviour
 {
+
+    [SerializeField] private GameObject carGameObject;
     int goldAmountReal = 0;
+    private CarMovement carMovement;
+
 
     private void Awake()
     {
+        SaveSystem.Init();
+
+        carMovement = carGameObject.GetComponent<CarMovement>();
+
         SaveObject saveObject = new SaveObject
         {
-            goldAmount = 5
+            goldAmount = 5,
+            carPosition = carGameObject.transform.position
         };
         string json = JsonUtility.ToJson(saveObject);
         Debug.Log("saved = " + json);
@@ -24,7 +33,7 @@ public class GameHandler : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log("p pressed");
+            Debug.Log("p pressed - Saving Game....");
             Save();
         }
         if(Input.GetKeyDown(KeyCode.O))
@@ -34,8 +43,9 @@ public class GameHandler : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Debug.Log("p pressed");
+            Debug.Log("l pressed");
             Load();
+            Debug.Log("current gold is: " + goldAmountReal);
         }
     }
 
@@ -43,30 +53,33 @@ public class GameHandler : MonoBehaviour
     {
         SaveObject saveObject = new SaveObject
         {
-            goldAmount = goldAmountReal
+            goldAmount = goldAmountReal,
+            carPosition = carGameObject.transform.position
         };
         string json = JsonUtility.ToJson(saveObject);
 
-        File.WriteAllText(Application.dataPath + "/save.txt", json);
+        SaveSystem.Save(json);
     }
 
     private void Load()
     {
-        if (File.Exists(Application.dataPath + "/save.txt"))
+        string saveString = SaveSystem.Load();
+        if(saveString != null)
         {
-            string saveString = File.ReadAllText(Application.dataPath + "/save.txt");
-
             Debug.Log("Loaded: " + saveString);
 
             SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
 
             goldAmountReal = saveObject.goldAmount;
+            carGameObject.transform.position = saveObject.carPosition;
         }
     }
 
     private class SaveObject
     {
         public int goldAmount;
+        public Vector3 carPosition;
+        public CarMovement carMovement;
     }
 
 }

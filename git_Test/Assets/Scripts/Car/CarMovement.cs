@@ -11,6 +11,8 @@ public class CarMovement : MonoBehaviour
     public float moveSpeed = 5f;
 
     Vector2 moveDirection = Vector2.zero;
+    float oldMovement = 0;
+    float newMovement;
 
     private void OnEnable()
     {
@@ -25,17 +27,34 @@ public class CarMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //TestingEvents.current.forwardMovement += OnMoveForward;
     }
 
     // Update is called once per frame
     void Update()
     {
+
         moveDirection = playerControls.ReadValue<Vector2>();
+        newMovement = moveDirection.y;
+
+        if(oldMovement < newMovement && newMovement > 0)
+        {
+            TestingEvents.current.forwardTrigger();
+            
+        }
+        oldMovement = newMovement;
+
     }
+
+
 
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+       /* if (moveDirection.y > 0)
+        {
+            TestingEvents.current.forwardTrigger();
+        }
+       */
     }
 }

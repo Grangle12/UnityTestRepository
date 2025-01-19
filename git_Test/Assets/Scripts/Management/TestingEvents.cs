@@ -5,6 +5,24 @@ using UnityEngine;
 
 public class TestingEvents : MonoBehaviour
 {
+
+    public static TestingEvents current;
+
+    private void Awake()
+    {
+        current = this;
+    }
+
+    public event Action forwardMovement;
+
+    public void forwardTrigger()
+    {
+        if (forwardMovement != null)
+        {
+            forwardMovement();
+        }
+    }
+
     public event EventHandler<OnSpacePressedEventArges> OnSpacePressed;
     public class OnSpacePressedEventArges : EventArgs
     {

@@ -8,7 +8,7 @@ public class CarSounds : MonoBehaviour
     public AudioClip engineRev;
     public ParticleSystem exhaust;
     bool playing;
-
+    public bool enableSound;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +41,10 @@ public class CarSounds : MonoBehaviour
         playing = true;
 
 
-        source.PlayOneShot(engineRev);
+        if (enableSound)
+        {
+            source.PlayOneShot(engineRev);
+        }
         Debug.Log("got here");
 
         yield return new WaitForSeconds(engineRev.length-0.5f);

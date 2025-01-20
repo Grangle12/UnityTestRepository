@@ -33,8 +33,30 @@ public class CarMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
         moveDirection = playerControls.ReadValue<Vector2>();
+        if(moveDirection.y > 0)
+        {
+            TestingEvents.current.forwardTrigger();
+            transform.Translate(new Vector3(0,1,0) * moveSpeed * Time.deltaTime);
+            
+        }
+        else if (moveDirection.y < 0)
+        {
+            transform.Translate(new Vector3(0, -1, 0) * moveSpeed * Time.deltaTime);
+        }
+        if (moveDirection.x > 0)
+        {
+
+            transform.Translate(new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime);
+
+        }
+        else if (moveDirection.x < 0)
+        {
+            transform.Translate(new Vector3(-1, 0, 0) * moveSpeed * Time.deltaTime);
+        }
+
+        /*
         newMovement = moveDirection.y;
 
         if(oldMovement < newMovement && newMovement > 0)
@@ -43,6 +65,8 @@ public class CarMovement : MonoBehaviour
             
         }
         oldMovement = newMovement;
+        */
+
 
     }
 
@@ -50,7 +74,8 @@ public class CarMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+        
+        //rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
        /* if (moveDirection.y > 0)
         {
             TestingEvents.current.forwardTrigger();

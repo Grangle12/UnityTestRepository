@@ -1,1 +1,1 @@
-{"goldAmount":6}
+{"saveTime":5.3617377281188969,"saveCoinAmount":1,"carPosition":{"x":-0.4840599000453949,"y":0.9989834427833557,"z":-1.0},"carMovement":{"instanceID":70392},"saveCoinDictionary":{"keys":[3,2,1],"values":[false,false,false]}}

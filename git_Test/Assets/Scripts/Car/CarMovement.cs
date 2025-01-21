@@ -11,8 +11,8 @@ public class CarMovement : MonoBehaviour
     public float moveSpeed = 5f;
 
     Vector2 moveDirection = Vector2.zero;
-    float oldMovement = 0;
-    float newMovement;
+    //float oldMovement = 0;
+   // float newMovement;
 
     private void OnEnable()
     {
@@ -37,7 +37,7 @@ public class CarMovement : MonoBehaviour
         moveDirection = playerControls.ReadValue<Vector2>();
         if(moveDirection.y > 0)
         {
-            TestingEvents.current.forwardTrigger();
+            EventManager.current.forwardTrigger();
             transform.Translate(new Vector3(0,1,0) * moveSpeed * Time.deltaTime);
             
         }

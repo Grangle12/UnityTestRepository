@@ -1,1 +1,1 @@
-{"goldAmount":0,"carPosition":{"x":1.3020819425582886,"y":1.2020820379257203,"z":0.0},"carMovement":{"instanceID":0}}
+{"saveTime":2.8348333835601808,"saveCoinAmount":2,"carPosition":{"x":1.3629732131958008,"y":5.612403392791748,"z":-1.0},"carMovement":{"instanceID":70392},"saveCoinDictionary":{"keys":[2],"values":[false]}}

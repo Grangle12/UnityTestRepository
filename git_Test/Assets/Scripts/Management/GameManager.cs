@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+    public static GameManager instance;
     [SerializeField] private GameObject carGameObject;
     public int coinAmount = 0;
     private CarMovement playerUnit;
@@ -14,9 +14,15 @@ public class GameManager : MonoBehaviour
     public SerializableDictionary<int, bool> coinDictionary = new SerializableDictionary<int, bool>();
     List<CoinCollection> coins = new List<CoinCollection>();
 
+    public bool gameOver;
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
         SaveSystem.Init();
 
         playerUnit = carGameObject.GetComponent<CarMovement>();
@@ -62,9 +68,9 @@ public class GameManager : MonoBehaviour
         currentTime += Time.deltaTime;
 
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.K))
         {
-            Debug.Log("p pressed - Saving Game....");
+            Debug.Log("K pressed - Saving Game....");
             Save();
         }
         if(Input.GetKeyDown(KeyCode.O))

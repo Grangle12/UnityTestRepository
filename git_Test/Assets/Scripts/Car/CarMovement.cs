@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class CarMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
-    public InputAction playerControls;
+    //public InputAction playerControls;
     public float moveSpeed = 5f;
 
     Vector2 moveDirection = Vector2.zero;
@@ -16,12 +16,12 @@ public class CarMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        playerControls.Enable();
+       // playerControls.Enable();
     }
 
     private void OnDisable()
     {
-        playerControls.Disable();
+       // playerControls.Disable();
     }
 
     // Start is called before the first frame update
@@ -33,13 +33,33 @@ public class CarMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (InputManager.instance.MoveInput.y > 0)
+        {
+            EventManager.current.forwardTrigger();
+            transform.Translate(new Vector3(0, 1, 0) * moveSpeed * Time.deltaTime);
+        }
+        else if (InputManager.instance.MoveInput.y < 0)
+        {
+            transform.Translate(new Vector3(0, -1, 0) * moveSpeed * Time.deltaTime);
+        }
+        if (InputManager.instance.MoveInput.x > 0)
+        {
+
+            transform.Translate(new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime);
+
+        }
+        else if (InputManager.instance.MoveInput.x < 0)
+        {
+            transform.Translate(new Vector3(-1, 0, 0) * moveSpeed * Time.deltaTime);
+        }
+
+        /*
         moveDirection = playerControls.ReadValue<Vector2>();
         if(moveDirection.y > 0)
         {
             EventManager.current.forwardTrigger();
             transform.Translate(new Vector3(0,1,0) * moveSpeed * Time.deltaTime);
-            
+
         }
         else if (moveDirection.y < 0)
         {
@@ -62,7 +82,7 @@ public class CarMovement : MonoBehaviour
         if(oldMovement < newMovement && newMovement > 0)
         {
             TestingEvents.current.forwardTrigger();
-            
+
         }
         oldMovement = newMovement;
         */

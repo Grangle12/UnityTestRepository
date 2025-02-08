@@ -14,13 +14,18 @@ public class EventManager : MonoBehaviour
     }
 
     public event Action forwardMovement;
-    public event Action coinPickup;
+    //public event Action coinPickup;
+    public event Action gamePaused;
 
     public void forwardTrigger()
     {
         if (forwardMovement != null)
         {
             forwardMovement();
+        }
+        if (gamePaused != null)
+        {
+            gamePaused();
         }
     }
 

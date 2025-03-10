@@ -1,0 +1,1 @@
+{"highScoreDictionarySave":{"keys":["Player"],"values":[{"keys":[16],"values":[40.72065353393555]}]},"playerHSSave":{"keys":[],"values":[]},"coinHSSave":{"keys":[],"values":[]},"timeHSSave":{"keys":[],"values":[]}}

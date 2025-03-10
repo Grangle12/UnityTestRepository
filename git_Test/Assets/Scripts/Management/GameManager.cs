@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     private CarMovement playerUnit;
     public float currentTime;
     public SerializableDictionary<int, bool> coinDictionary = new SerializableDictionary<int, bool>();
+    //public SerializableDictionary<int, float> coinTimeHSDictionary = new SerializableDictionary<int, float>();
+    //public SerializableDictionary<string, SerializableDictionary<int, float>> highScoreDictionary = new SerializableDictionary<string, SerializableDictionary< int, float>>();
     List<CoinCollection> coins = new List<CoinCollection>();
 
     public bool gameOver;

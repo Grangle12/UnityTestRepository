@@ -31,9 +31,5 @@ public class EventSubscriber : MonoBehaviour
         //testingEvents.OnSpacePressed -= TestingEvents_OnSpacePressed;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+ 
 }

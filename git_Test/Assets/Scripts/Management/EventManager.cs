@@ -8,9 +8,12 @@ public class EventManager : MonoBehaviour
 
     public static EventManager current;
 
+    bool triggered = false;
+
     private void Awake()
     {
         current = this;
+        
     }
 
     public event Action forwardMovement;
@@ -31,10 +34,16 @@ public class EventManager : MonoBehaviour
 
 
     public event EventHandler<OnSpacePressedEventArges> OnSpacePressed;
+    public event EventHandler<OnGameOverEventArges> OnGameOver;
     public class OnSpacePressedEventArges : EventArgs
     {
         public int spaceCount;
     }
+    public class OnGameOverEventArges : EventArgs
+    {
+        public bool gameOverEvent;
+    }
+
 
     public event TestEventDelegate OnFloatEvent;
     public delegate void TestEventDelegate(float f);
@@ -70,6 +79,14 @@ public class EventManager : MonoBehaviour
             OnFloatEvent?.Invoke(5.5f);
 
             OnActionEvent?.Invoke(true, 56);
+        }
+        if(GameManager.instance.gameOver == true)
+        {
+            if (!triggered)
+            {
+                OnGameOver?.Invoke(this, new OnGameOverEventArges { gameOverEvent = true });
+                triggered = true;
+            }
         }
     }
 }

@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
+    EventManager gameOverEvent;
+
+
     [SerializeField] private GameObject mainMenuCanvasGO;
     [SerializeField] private GameObject gameOverMenuCanvasGO;
 
@@ -17,6 +20,8 @@ public class MenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameOverEvent = FindObjectOfType<EventManager>().GetComponent<EventManager>();
+        gameOverEvent.OnGameOver += GameOverEvent_GameOver;
         mainMenuCanvasGO.SetActive(false);
         gameOverMenuCanvasGO.SetActive(false);
         //settingsMenuCanvasGO.SetActive(false);
@@ -41,10 +46,7 @@ public class MenuManager : MonoBehaviour
             }
         
         }
-        if (GameManager.instance.gameOver)
-        {
-            OpenGameOverMenu();
-        }
+
     }
 
 
@@ -77,8 +79,11 @@ public class MenuManager : MonoBehaviour
         Debug.Log("CLOSING MENU");
     }
 
-    private void OpenGameOverMenu()
+
+    private void GameOverEvent_GameOver(object sender, EventManager.OnGameOverEventArges e)
     {
-        gameOverMenuCanvasGO.SetActive(true);
+            Debug.Log("Game over event triggered");
+            gameOverMenuCanvasGO.SetActive(true);
+
     }
 }

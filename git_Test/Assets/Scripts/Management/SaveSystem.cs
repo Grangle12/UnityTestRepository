@@ -30,6 +30,12 @@ public static class SaveSystem
         Debug.Log("File Saved to: " + SAVE_FOLDER + "save_" + saveNumber + ".txt");
     }
 
+    public static void SaveHighScore(string saveHighScoreString)
+    {
+        File.WriteAllText(SAVE_FOLDER + "HighScores.txt", saveHighScoreString);
+        Debug.Log("File Saved to: " + SAVE_FOLDER + "HighScores.txt");
+    }
+
     public static string Load()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);

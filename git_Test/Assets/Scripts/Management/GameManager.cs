@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     {
 
         UpdateCoinCount();
-
+        
 
     }
 

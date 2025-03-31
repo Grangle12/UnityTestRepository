@@ -6,7 +6,11 @@ using System.Linq;
 public class HighScore : MonoBehaviour
 {
     public static HighScore instance;
+    
     EventManager gameOverEvent;
+    [SerializeField] MenuManager menuManager;
+  
+    
     int coinCount;
     float time;
 
@@ -21,18 +25,22 @@ public class HighScore : MonoBehaviour
 
 
 
-    public TMPro.TMP_Text HSTEXT;
-    public TMPro.TMP_Text playerName;
+    public TMPro.TMP_Text HSTextName;
+    public TMPro.TMP_Text HSTextTime;
+    public TMPro.TMP_Text HSTextCoin;
+    public TMPro.TMP_Text HSTextScore;
 
     HS_LineInfo[] highScoreArr = new HS_LineInfo[10];
+    string hSInput;
 
-    
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
+       
     }
     private void Start()
     {
@@ -93,12 +101,8 @@ public class HighScore : MonoBehaviour
         Debug.Log("got here");
         coinCount = GameManager.instance.coinAmount;
         time = GameManager.instance.currentTime;
-        
-                 
-        ///////// Old dictionary in dictionary way
-       // coinTimeDictionary.Add(coinCount, time);
-        //highScoreDictionary.Add("Player", coinTimeDictionary);
         Debug.Log("Congratulations XXXX you have found " + coinCount + " and your time was " + time.ToString("F4"));
+        
         SaveHighScores();
             
         ////////////////
@@ -131,9 +135,7 @@ public class HighScore : MonoBehaviour
                  
 
         SaveSystem.SaveHighScores(combinedString);
-        Debug.Log("HIGH SCORES SAVED??");
-        
-        
+       
     }
 
     //Put some default scores in so the HS isnt empty, can be deleted later
@@ -144,23 +146,60 @@ public class HighScore : MonoBehaviour
 
     void SortHighScore()
     {
-        Debug.Log("here is the array: " + highScoreArr.Length);
+     
         highScoreArr = highScoreArr.OrderBy(x => -x.score).ToArray();
 
     }
 
-
-    private class SaveHighScoreObject
+    public void ReadStringInput(string s)
     {
-        /*
-        public SerializableDictionary<string, SerializableDictionary<int, float>> highScoreDictionarySave = new SerializableDictionary<string, SerializableDictionary<int, float>>();
-        public SerializableDictionary<string, int> playerHSSave = new SerializableDictionary<string, int>();
-        public SerializableDictionary<int, int> coinHSSave = new SerializableDictionary<int, int>();
-        public SerializableDictionary<float, int> timeHSSave = new SerializableDictionary<float, int>();
-        */
+        hSInput = s;
+        Debug.Log(hSInput);
+        
+        
         
 
+        int score = GameManager.instance.CalculateScore(time, coinCount);
+        Debug.Log("Score is: " + score);
+
+
+        if(score > highScoreArr[highScoreArr.Length-1].score)
+        {
+            HS_LineInfo newHS = new HS_LineInfo();
+            if(hSInput.Length > 10)
+            {
+                hSInput = hSInput.Substring(0,10);
+            }
+            newHS.name = hSInput;
+            newHS.coinCount = coinCount;
+            newHS.time = time;
+            newHS.score = score;
+            highScoreArr[highScoreArr.Length - 1] = newHS;
+            SortHighScore();
+            SaveHighScores();
+        }
+       
+        
+        menuManager.gameOverMenuCanvasGO.SetActive(false);
+        menuManager.mainMenuCanvasGO.SetActive(true);
+        menuManager.highScoreCanvasGO.SetActive(true);
+        PopulateHSScreen();
     }
 
+    private void PopulateHSScreen()
+    {
+        HSTextName.text = highScoreArr[0].name + "\n";
+        HSTextTime.text = highScoreArr[0].time.ToString("F2") + "\n";
+        HSTextCoin.text = highScoreArr[0].coinCount.ToString() + "\n";
+        HSTextScore.text = highScoreArr[0].score + "\n";
 
+        for (int i = 1; i < highScoreArr.Length; i++)
+        {
+            HSTextName.text += highScoreArr[i].name + "\n";
+            HSTextTime.text += highScoreArr[i].time.ToString("F2") + "\n";
+            HSTextCoin.text += highScoreArr[i].coinCount.ToString() + "\n";
+            HSTextScore.text += highScoreArr[i].score + "\n";
+        }
+    }
+    
 }

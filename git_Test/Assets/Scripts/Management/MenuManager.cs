@@ -6,14 +6,16 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
+    public static MenuManager instance;
     EventManager gameOverEvent;
 
 
-    [SerializeField] private GameObject mainMenuCanvasGO;
-    [SerializeField] private GameObject gameOverMenuCanvasGO;
+    [SerializeField] public GameObject mainMenuCanvasGO;
+    [SerializeField] public GameObject gameOverMenuCanvasGO;
+    [SerializeField] public GameObject highScoreCanvasGO;
 
 
-    [SerializeField] private GameObject mainMenuFirst;
+    [SerializeField] public GameObject mainMenuFirst;
     [SerializeField] private GameObject settingsMenuFirst;
 
 

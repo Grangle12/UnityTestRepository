@@ -1,0 +1,1 @@
+{"saveTime":25.13923454284668,"saveCoinAmount":20,"carPosition":{"x":6.199628829956055,"y":123.4134292602539,"z":-1.0},"carMovement":{"instanceID":32564},"saveCoinDictionary":{"keys":[11,7,18,19,17,1,8,5,15,16,3,9,20,14,4,6,13,2,12,10],"values":[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true]}}

@@ -7,6 +7,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
     [SerializeField] private GameObject carGameObject;
     public int coinAmount = 0;
     private CarMovement playerUnit;
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     public bool gameOver;
 
+    
     private void Awake()
     {
         if (instance == null)
@@ -67,7 +69,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        currentTime += Time.deltaTime;
+        if (!gameOver)
+        {
+            currentTime += Time.deltaTime;
+        }
 
 
         if (Input.GetKeyDown(KeyCode.K))
@@ -132,6 +137,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public int CalculateScore(float time, int coinAMT)
+    {
+        int score = ((10000-((int)(time*100))) * coinAmount)/100;
+        Debug.Log("time says: " + (int)(time * 100));
+        Debug.Log("10000-time says: " + (10000 - ((int)(time * 100))));
+        if(score < 0)
+        {
+            score = 0;
+        }
+
+        return score;
+    }
+
+
     private class SaveObject
     {
         public float saveTime;
@@ -144,4 +163,5 @@ public class GameManager : MonoBehaviour
 
     }
 
+    
 }

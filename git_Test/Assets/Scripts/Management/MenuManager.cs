@@ -73,11 +73,13 @@ public class MenuManager : MonoBehaviour
     public void OpenMainMenu()
     {
         mainMenuCanvasGO.SetActive(true);
+        highScoreCanvasGO.SetActive(false);
         Debug.Log("OPENING MENU");
     }
     private void CloseAllMenus()
     {
         mainMenuCanvasGO.SetActive(false);
+        highScoreCanvasGO.SetActive(false);
         Debug.Log("CLOSING MENU");
     }
 

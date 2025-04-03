@@ -9,30 +9,22 @@ public class HighScore : MonoBehaviour
     
     EventManager gameOverEvent;
     [SerializeField] MenuManager menuManager;
-  
+    [SerializeField] GameObject inputFieldGO;
+    [SerializeField] GameObject textFieldGO;
     
     int coinCount;
     float time;
-
-    public SerializableDictionary<string, SerializableDictionary<int, float>> highScoreDictionary = new SerializableDictionary<string, SerializableDictionary<int, float>>();
-    public SerializableDictionary<int, float> coinTimeDictionary = new SerializableDictionary<int, float>();
-
-
-    List<string> playerNamesList = new List<string>();
-    List<int> playerCoinCountList = new List<int>();
-    List<float> playerTimeList = new List<float>();
-
-
-
 
     public TMPro.TMP_Text HSTextName;
     public TMPro.TMP_Text HSTextTime;
     public TMPro.TMP_Text HSTextCoin;
     public TMPro.TMP_Text HSTextScore;
+    public TMPro.TMP_Text HSYourScore;
 
     HS_LineInfo[] highScoreArr = new HS_LineInfo[10];
     string hSInput;
 
+    int score = 0;
 
     private void Awake()
     {
@@ -89,34 +81,29 @@ public class HighScore : MonoBehaviour
                 highScoreArr[i].score = 0;
             }
             highScoreArr[i] = JsonUtility.FromJson <HS_LineInfo>(splitTest[i]);
-            Debug.Log("HighScore[" + i +"]" + highScoreArr[i].name);
-            Debug.Log("HighScore[" + i +"]" + highScoreArr[i].score);
-            Debug.Log("HighScore[" + i +"]" + highScoreArr[i].coinCount);
-            Debug.Log("HighScore[" + i +"]" + highScoreArr[i].time);
-            
+           
         }
     }
     private void GameOverEvent_Highscore(object sender, EventManager.OnGameOverEventArges e)
     {
-        Debug.Log("got here");
         coinCount = GameManager.instance.coinAmount;
         time = GameManager.instance.currentTime;
         Debug.Log("Congratulations XXXX you have found " + coinCount + " and your time was " + time.ToString("F4"));
-        
-        SaveHighScores();
-            
-        ////////////////
+        score = GameManager.instance.CalculateScore(time, coinCount);
+
+        if (score > highScoreArr[highScoreArr.Length - 1].score)
+        {
+            inputFieldGO.SetActive(true);
+            textFieldGO.SetActive(true);
+        }
+        else
+        {
+            ShowHighScores();
+        }
     }
 
     private void SaveHighScores()
     {
-        /*SaveHighScoreObject saveHSObject = new SaveHighScoreObject
-        {
-            //highScoreDictionarySave = highScoreDictionary,
-
-        };
-        */
-        //string[] strToJSONArr = new string[highScoreArr.Length];
         string combinedString = "";
 
         for (int i = 0; i < highScoreArr.Length; i++)
@@ -129,70 +116,57 @@ public class HighScore : MonoBehaviour
             {
                 combinedString += "\n" + JsonUtility.ToJson(highScoreArr[i]);
             }
-            
-             
         }
-                 
-
         SaveSystem.SaveHighScores(combinedString);
-       
-    }
-
-    //Put some default scores in so the HS isnt empty, can be deleted later
-    void AddHighScores(int scoreCount, TMPro.TMP_Text playerName, int coinCount)
-    {
-        //new { score = scoreCount, player = playerName.text, coins = coinCount}
     }
 
     void SortHighScore()
     {
-     
         highScoreArr = highScoreArr.OrderBy(x => -x.score).ToArray();
-
     }
 
+    // This is tied to the field input of the High Score Screen that shows up when the player has a score greater than the lowest score in the top 10
     public void ReadStringInput(string s)
     {
+        
         hSInput = s;
         Debug.Log(hSInput);
         
-        
-        
-
-        int score = GameManager.instance.CalculateScore(time, coinCount);
-        Debug.Log("Score is: " + score);
-
-
-        if(score > highScoreArr[highScoreArr.Length-1].score)
+        HS_LineInfo newHS = new HS_LineInfo();
+        if(hSInput.Length > 10)
         {
-            HS_LineInfo newHS = new HS_LineInfo();
-            if(hSInput.Length > 10)
-            {
-                hSInput = hSInput.Substring(0,10);
-            }
-            newHS.name = hSInput;
-            newHS.coinCount = coinCount;
-            newHS.time = time;
-            newHS.score = score;
-            highScoreArr[highScoreArr.Length - 1] = newHS;
-            SortHighScore();
-            SaveHighScores();
+            hSInput = hSInput.Substring(0,10);
+            Debug.Log("Player Name is Greater than 10 characters");
         }
-       
-        
-        menuManager.gameOverMenuCanvasGO.SetActive(false);
-        menuManager.mainMenuCanvasGO.SetActive(true);
-        menuManager.highScoreCanvasGO.SetActive(true);
-        PopulateHSScreen();
+        newHS.name = hSInput;
+        newHS.coinCount = coinCount;
+        newHS.time = time;
+        newHS.score = score;
+        highScoreArr[highScoreArr.Length - 1] = newHS;
+        SortHighScore();
+        SaveHighScores();
+
+        ShowHighScores();
     }
 
+    public void ShowHighScores()
+    {
+
+        menuManager.gameOverMenuCanvasGO.SetActive(false);
+        menuManager.mainMenuCanvasGO.SetActive(false);
+        menuManager.highScoreCanvasGO.SetActive(true);
+        HSYourScore.text = "Your Score was: " + score.ToString();
+        PopulateHSScreen();
+    }
     private void PopulateHSScreen()
     {
+        // This portion sets the initial text
         HSTextName.text = highScoreArr[0].name + "\n";
         HSTextTime.text = highScoreArr[0].time.ToString("F2") + "\n";
         HSTextCoin.text = highScoreArr[0].coinCount.ToString() + "\n";
         HSTextScore.text = highScoreArr[0].score + "\n";
 
+        //This portion adds to the initial text
         for (int i = 1; i < highScoreArr.Length; i++)
         {
             HSTextName.text += highScoreArr[i].name + "\n";

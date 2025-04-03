@@ -45,20 +45,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
         UpdateCoinCount();
-        
-
     }
 
     void UpdateCoinCount()
     {
         coins.Clear();
-        Debug.Log("coin count is: " + coins.Count);
-
         coins = FindObjectsOfType<CoinCollection>().ToList();
-        Debug.Log("new coin count is: " + coins.Count);
-
+ 
         coinDictionary.Clear();
 
         for (int i = 0; i < coins.Count; i++)

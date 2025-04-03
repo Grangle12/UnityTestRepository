@@ -1,10 +1,10 @@
+{"name":"Balto","coinCount":20,"time":24.719446182250978,"score":9181}
 {"name":"Roger","coinCount":0,"time":7.0,"score":3098}
+{"name":"Pokle","coinCount":20,"time":24.819692611694337,"score":1978}
+{"name":"Trogdor","coinCount":20,"time":25.0199031829834,"score":1969}
+{"name":"Scooby","coinCount":20,"time":24.83915138244629,"score":1965}
 {"name":"Impr!","coinCount":20,"time":24.479883193969728,"score":1672}
 {"name":"BROWSER TE","coinCount":20,"time":25.03966522216797,"score":1649}
 {"name":"KILLA MAN ","coinCount":20,"time":24.818567276000978,"score":1578}
-{"name":"cOUNTRY Ga","coinCount":19,"time":26.558738708496095,"score":1469}
-{"name":"Balto","coinCount":20,"time":24.719446182250978,"score":181}
-{"name":"Pokle","coinCount":20,"time":24.819692611694337,"score":178}
-{"name":"Trogdor","coinCount":20,"time":25.0199031829834,"score":169}
-{"name":"Scooby","coinCount":20,"time":24.83915138244629,"score":165}
-{"name":"Zero","coinCount":20,"time":24.51888084411621,"score":159}
+{"name":"Bargf","coinCount":20,"time":24.919198989868165,"score":1501}
+{"name":"Groodge","coinCount":20,"time":25.238201141357423,"score":1495}

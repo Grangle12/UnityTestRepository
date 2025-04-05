@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Save()
+    public void Save()
     {
         UpdateCoinCount();
 
@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         SaveSystem.Save(json);
     }
 
-    private void Load()
+    public void Load()
     {
         string saveString = SaveSystem.Load();
         if(saveString != null)
@@ -133,9 +133,9 @@ public class GameManager : MonoBehaviour
 
     public int CalculateScore(float time, int coinAMT)
     {
-        int score = ((10000-((int)(time*100))) * coinAmount)/100;
-        Debug.Log("time says: " + (int)(time * 100));
-        Debug.Log("10000-time says: " + (10000 - ((int)(time * 100))));
+        int score = ((100000-((int)(time*1000))) * coinAmount)/1000;
+        Debug.Log("time says: " + (int)(time * 1000));
+        Debug.Log("10000-time says: " + (100000 - ((int)(time * 1000))));
         if(score < 0)
         {
             score = 0;

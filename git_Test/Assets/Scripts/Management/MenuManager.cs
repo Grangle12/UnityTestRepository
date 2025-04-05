@@ -76,6 +76,7 @@ public class MenuManager : MonoBehaviour
         highScoreCanvasGO.SetActive(false);
         Debug.Log("OPENING MENU");
     }
+
     private void CloseAllMenus()
     {
         mainMenuCanvasGO.SetActive(false);

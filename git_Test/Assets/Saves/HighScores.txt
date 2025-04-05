@@ -1,10 +1,10 @@
-{"name":"Balto","coinCount":20,"time":24.719446182250978,"score":9181}
-{"name":"Roger","coinCount":0,"time":7.0,"score":3098}
-{"name":"Pokle","coinCount":20,"time":24.819692611694337,"score":1978}
-{"name":"Trogdor","coinCount":20,"time":25.0199031829834,"score":1969}
-{"name":"Scooby","coinCount":20,"time":24.83915138244629,"score":1965}
-{"name":"Impr!","coinCount":20,"time":24.479883193969728,"score":1672}
-{"name":"BROWSER TE","coinCount":20,"time":25.03966522216797,"score":1649}
 {"name":"KILLA MAN ","coinCount":20,"time":24.818567276000978,"score":1578}
+{"name":"Red","coinCount":20,"time":24.82785987854004,"score":1503}
+{"name":"Greg","coinCount":20,"time":24.802852630615236,"score":1503}
+{"name":"Tess","coinCount":20,"time":24.871971130371095,"score":1502}
 {"name":"Bargf","coinCount":20,"time":24.919198989868165,"score":1501}
+{"name":"BringIT","coinCount":20,"time":24.960004806518556,"score":1500}
+{"name":"Dredd","coinCount":20,"time":25.0185604095459,"score":1499}
+{"name":"KillerKlow","coinCount":20,"time":25.079103469848634,"score":1498}
 {"name":"Groodge","coinCount":20,"time":25.238201141357423,"score":1495}
+{"name":"Freddy","coinCount":20,"time":28.359434127807618,"score":1432}

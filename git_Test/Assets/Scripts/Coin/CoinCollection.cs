@@ -44,6 +44,10 @@ public class CoinCollection : MonoBehaviour
         {
             this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         }
+        else
+        {
+            this.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        }
     }
     
 

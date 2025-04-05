@@ -21,21 +21,27 @@ public class PauseManager : MonoBehaviour
 
     public void PauseGame()
     {
-        isPaused = true;
-        currentSpeed = Time.timeScale;
-        Time.timeScale = 0f;
-        Debug.Log("***PAUSED****");
+        if (!isPaused)
+        {
+            isPaused = true;
+            currentSpeed = Time.timeScale;
+            Time.timeScale = 0f;
+            Debug.Log("***PAUSED****");
 
-        InputManager.PlayerInput.SwitchCurrentActionMap("UI");
+            InputManager.PlayerInput.SwitchCurrentActionMap("UI");
+        }
     }
 
     public void UnpauseGame()
     {
-        isPaused = false;
-        Time.timeScale = currentSpeed;
-        Debug.Log("***UNPAUSED****");
+        if (isPaused)
+        {
+            isPaused = false;
+            Time.timeScale = currentSpeed;
+            Debug.Log("***UNPAUSED****");
 
-        InputManager.PlayerInput.SwitchCurrentActionMap("Player");
+            InputManager.PlayerInput.SwitchCurrentActionMap("Player");
+        }
     }
 
 

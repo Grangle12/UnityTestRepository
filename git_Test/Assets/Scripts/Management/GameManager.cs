@@ -3,19 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    //SceneManager currentScene;
 
-    [SerializeField] private GameObject carGameObject;
-    public int coinAmount = 0;
-    private CarMovement playerUnit;
+    [SerializeField] public GameObject carGameObject;
+
+    public CarMovement playerUnit;
     public float currentTime;
+   
+    //Coins
     public SerializableDictionary<int, bool> coinDictionary = new SerializableDictionary<int, bool>();
-    //public SerializableDictionary<int, float> coinTimeHSDictionary = new SerializableDictionary<int, float>();
-    //public SerializableDictionary<string, SerializableDictionary<int, float>> highScoreDictionary = new SerializableDictionary<string, SerializableDictionary< int, float>>();
-    List<CoinCollection> coins = new List<CoinCollection>();
+    public List<CoinCollection> coins = new List<CoinCollection>();
+    public int coinAmount = 0;
+
+
 
     public bool gameOver;
 
@@ -26,29 +31,20 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-
+       // DontDestroyOnLoad(this.gameObject);
         SaveSystem.Init();
-
-        playerUnit = carGameObject.GetComponent<CarMovement>();
-
-        SaveObject saveObject = new SaveObject
-        {
-            saveCoinAmount = 5,
-            carPosition = carGameObject.transform.position
-        };
-        string json = JsonUtility.ToJson(saveObject);
-        Debug.Log("saved = " + json);
-
-        SaveObject loadedSaveObject = JsonUtility.FromJson<SaveObject>(json);
-        Debug.Log("loaded = " + loadedSaveObject.saveCoinAmount);
     }
 
     private void Start()
     {
-        UpdateCoinCount();
+        if (carGameObject != null)
+        {
+            playerUnit = carGameObject.GetComponent<CarMovement>();
+            UpdateCoinCount();
+        }
     }
 
-    void UpdateCoinCount()
+    public void UpdateCoinCount()
     {
         coins.Clear();
         coins = FindObjectsOfType<CoinCollection>().ToList();
@@ -69,30 +65,47 @@ public class GameManager : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (carGameObject != null)
         {
-            Debug.Log("K pressed - Saving Game....");
-            Save();
+            //KEY INPUTS - 
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                Save();
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                Load();
+            }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                coinAmount++;
+            }
         }
-        if(Input.GetKeyDown(KeyCode.O))
+    }
+
+    public int CalculateScore(float time, int coinAMT)
+    {
+        int score = ((100000 - ((int)(time * 1000))) * coinAmount) / 1000;
+        Debug.Log("time says: " + (int)(time * 1000));
+        Debug.Log("10000-time says: " + (100000 - ((int)(time * 1000))));
+        if (score < 0)
         {
-            coinAmount++;
-            Debug.Log("current gold is: " + coinAmount);
+            score = 0;
         }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Debug.Log("l pressed");
-            Load();
-            Debug.Log("current gold is: " + coinAmount);
-        }
+
+        return score;
     }
 
     public void Save()
     {
+        SaveManager.instance.SaveGame();
+        /*
         UpdateCoinCount();
 
         SaveObject saveObject = new SaveObject
         {
+            // This or saveManager to get a scene from the save?
+            sceneName = SceneManager.GetActiveScene().name,
             saveTime = currentTime,
             saveCoinAmount = coinAmount,
             carPosition = carGameObject.transform.position,
@@ -103,17 +116,26 @@ public class GameManager : MonoBehaviour
         string json = JsonUtility.ToJson(saveObject);
 
         SaveSystem.Save(json);
+        */
     }
 
     public void Load()
     {
-        string saveString = SaveSystem.Load();
+        SaveManager.instance.LoadGame();
+        
+        /*string saveString = SaveSystem.Load();
         if(saveString != null)
         {
             Debug.Log("Loaded: " + saveString);
 
             SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
-
+            // This or saveManager to get a scene from the save?
+            if(SceneManager.GetActiveScene().name != saveObject.sceneName)
+            {
+                Debug.Log("Scenename is: " + SceneManagerScript.instance.name);
+                SceneManagerScript.instance.LoadGameFromOtherScene(saveObject.sceneName);
+            }
+            
             currentTime = saveObject.saveTime;
             coinAmount = saveObject.saveCoinAmount;
             this.GetComponent<DisplayText>().UpdateCoinCounter();
@@ -129,24 +151,15 @@ public class GameManager : MonoBehaviour
 
             
         }
+        */
     }
 
-    public int CalculateScore(float time, int coinAMT)
-    {
-        int score = ((100000-((int)(time*1000))) * coinAmount)/1000;
-        Debug.Log("time says: " + (int)(time * 1000));
-        Debug.Log("10000-time says: " + (100000 - ((int)(time * 1000))));
-        if(score < 0)
-        {
-            score = 0;
-        }
-
-        return score;
-    }
-
-
+    /*
     private class SaveObject
     {
+        // This or saveManager to get a scene from the save?
+        public string sceneName;
+        
         public float saveTime;
         
         public int saveCoinAmount;
@@ -156,6 +169,6 @@ public class GameManager : MonoBehaviour
 
 
     }
-
+    */
     
 }

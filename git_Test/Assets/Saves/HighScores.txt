@@ -7,4 +7,4 @@
 {"name":"Dredd","coinCount":20,"time":25.0185604095459,"score":1499}
 {"name":"KillerKlow","coinCount":20,"time":25.079103469848634,"score":1498}
 {"name":"Groodge","coinCount":20,"time":25.238201141357423,"score":1495}
-{"name":"Freddy","coinCount":20,"time":28.359434127807618,"score":1432}
+{"name":"BirdDancer","coinCount":20,"time":25.29732322692871,"score":1494}

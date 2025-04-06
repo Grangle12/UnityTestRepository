@@ -7,6 +7,7 @@ public static class SaveSystem
 {
     private static readonly string SAVE_FOLDER = Application.dataPath + "/Saves/";
     
+   
     
     
     public static void Init()
@@ -25,56 +26,12 @@ public static class SaveSystem
         {
             saveNumber++;
         }
+        
         Debug.Log("Saving Game. Save Number is: " + saveNumber);
         File.WriteAllText(SAVE_FOLDER + "save_" + saveNumber + ".txt", saveString);
         Debug.Log("File Saved to: " + SAVE_FOLDER + "save_" + saveNumber + ".txt");
     }
 
-    public static void SaveHighScores(string saveHighScoreString)
-    {
-        Debug.Log("Saving High Scores...");
-        
-        File.WriteAllText(SAVE_FOLDER + "HighScores.txt", saveHighScoreString );
-        Debug.Log("File Saved to: " + SAVE_FOLDER + "HighScores.txt");
-    }
-
-    public static string LoadHighScores()
-    {
-        DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
-        FileInfo[] saveFiles = directoryInfo.GetFiles("HighScores.txt");
-        FileInfo mostRecentFile = null;
-        foreach (FileInfo fileInfo in saveFiles)
-        {
-            if (mostRecentFile == null)
-            {
-                mostRecentFile = fileInfo;
-            }
-            else
-            {
-                if (fileInfo.LastWriteTime > mostRecentFile.LastWriteTime)
-                {
-                    mostRecentFile = fileInfo;
-
-                }
-
-            }
-        }
-
-        if (mostRecentFile != null)
-        {
-            string saveString = File.ReadAllText(mostRecentFile.FullName);
-            //string replacementString = saveString.Replace("\n", "");
-
-            //Debug.Log("Here is the string:" + saveString);
-            //Debug.Log("Here is the replacement string:" + replacementString);
-            //return replacementString;
-            return saveString;
-        }
-        else
-        {
-            return null;
-        }
-    }
 
     public static string Load()
     {
@@ -119,4 +76,53 @@ public static class SaveSystem
         }
         */
     }
+
+    
+
+    public static void SaveHighScores(string saveHighScoreString)
+    {
+        Debug.Log("Saving High Scores...");
+
+        File.WriteAllText(SAVE_FOLDER + "HighScores.txt", saveHighScoreString);
+        Debug.Log("File Saved to: " + SAVE_FOLDER + "HighScores.txt");
+    }
+
+    public static string LoadHighScores()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
+        FileInfo[] saveFiles = directoryInfo.GetFiles("HighScores.txt");
+        FileInfo mostRecentFile = null;
+        foreach (FileInfo fileInfo in saveFiles)
+        {
+            if (mostRecentFile == null)
+            {
+                mostRecentFile = fileInfo;
+            }
+            else
+            {
+                if (fileInfo.LastWriteTime > mostRecentFile.LastWriteTime)
+                {
+                    mostRecentFile = fileInfo;
+
+                }
+
+            }
+        }
+
+        if (mostRecentFile != null)
+        {
+            string saveString = File.ReadAllText(mostRecentFile.FullName);
+            //string replacementString = saveString.Replace("\n", "");
+
+            //Debug.Log("Here is the string:" + saveString);
+            //Debug.Log("Here is the replacement string:" + replacementString);
+            //return replacementString;
+            return saveString;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 }

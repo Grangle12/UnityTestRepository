@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
+   
+
     //SceneManager currentScene;
 
     [SerializeField] public GameObject carGameObject;
@@ -42,6 +45,7 @@ public class GameManager : MonoBehaviour
             playerUnit = carGameObject.GetComponent<CarMovement>();
             UpdateCoinCount();
         }
+        //saveManager = new SaveManager();
     }
 
     public void UpdateCoinCount()
@@ -70,7 +74,7 @@ public class GameManager : MonoBehaviour
             //KEY INPUTS - 
             if (Input.GetKeyDown(KeyCode.K))
             {
-                Save();
+                Save(true);
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
@@ -96,9 +100,9 @@ public class GameManager : MonoBehaviour
         return score;
     }
 
-    public void Save()
+    public void Save(bool newSave)
     {
-        SaveManager.instance.SaveGame();
+        SaveManager.instance.SaveGame(newSave);
         /*
         UpdateCoinCount();
 

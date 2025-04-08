@@ -1,0 +1,10 @@
+{"name":"Greg","coinCount":5,"time":19.600000381469728,"score":2109}
+{"name":"Almost","coinCount":20,"time":33.337806701660159,"score":1333}
+{"name":"King Charl","coinCount":20,"time":36.41851806640625,"score":1271}
+{"name":"Bob","coinCount":12,"time":22.450000762939454,"score":1034}
+{"name":"N/a","coinCount":0,"time":0.0,"score":0}
+{"name":"N/a","coinCount":0,"time":0.0,"score":0}
+{"name":"N/a","coinCount":0,"time":0.0,"score":0}
+{"name":"N/a","coinCount":0,"time":0.0,"score":0}
+{"name":"N/a","coinCount":0,"time":0.0,"score":0}
+{"name":"N/a","coinCount":0,"time":0.0,"score":0}

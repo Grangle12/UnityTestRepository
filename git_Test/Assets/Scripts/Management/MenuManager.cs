@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 
 public class MenuManager : MonoBehaviour
@@ -13,12 +15,24 @@ public class MenuManager : MonoBehaviour
     [SerializeField] public GameObject mainMenuCanvasGO;
     [SerializeField] public GameObject gameOverMenuCanvasGO;
     [SerializeField] public GameObject highScoreCanvasGO;
+    [SerializeField] public GameObject sGGO;
+    [SerializeField] public GameObject sGSlotGO;
+    [SerializeField] public GameObject sGSlotParentGO;
 
 
     [SerializeField] public GameObject mainMenuFirst;
     [SerializeField] private GameObject settingsMenuFirst;
 
+    List<GameObject> sGSlotGOList = new List<GameObject>();
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -74,14 +88,59 @@ public class MenuManager : MonoBehaviour
     {
         mainMenuCanvasGO.SetActive(true);
         highScoreCanvasGO.SetActive(false);
+        sGGO.SetActive(false);
         Debug.Log("OPENING MENU");
     }
 
-    private void CloseAllMenus()
+    public void OpenSaveMenu()
     {
+        sGGO.SetActive(true);
+        mainMenuCanvasGO.SetActive(false);
+        highScoreCanvasGO.SetActive(false);
+        Debug.Log("OPENING MENU");
+        PopulateSaveMenu();
+    }
+
+    public void PopulateSaveMenu()
+    {
+        string[] nameList = SaveSystem.ListOfSaveFiles();
+        for (int i = 0; i < nameList.Length; i++)
+        {
+            Debug.Log("saveFile String is: " + nameList[i]);
+        }
+        sGSlotParentGO.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 30 * nameList.Length);
+
+        bool inList = false;
+
+        for (int i =0; i < nameList.Length; i++)
+        {
+            foreach(var GO in sGSlotGOList)
+            {
+                Debug.Log("we got: " + GO.GetComponentInChildren<TMP_Text>().text);
+                if(GO.GetComponentInChildren<TMP_Text>().text == nameList[i])
+                {
+                    inList = true;
+                }
+            }
+            if (!inList)
+            {
+                GameObject newGO = Instantiate(sGSlotGO, sGSlotParentGO.transform);
+                newGO.GetComponentInChildren<TMP_Text>().text = nameList[i];
+                sGSlotGOList.Add(newGO);
+                newGO.GetComponent<Button>().onClick.AddListener(delegate () { SaveManager.instance.SaveGame(false); });
+            }
+            inList = false;
+        }
+
+    }
+
+    public void CloseAllMenus()
+    {
+        sGGO.SetActive(false);
         mainMenuCanvasGO.SetActive(false);
         highScoreCanvasGO.SetActive(false);
         Debug.Log("CLOSING MENU");
+        PauseManager.instance.UnpauseGame();
     }
 
 

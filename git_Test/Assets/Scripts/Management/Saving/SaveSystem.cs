@@ -22,21 +22,43 @@ public static class SaveSystem
     {
         
         int saveNumber = 1;
-        while (File.Exists(SAVE_FOLDER + "save_" + saveNumber + ".txt"))
+        while (File.Exists(SAVE_FOLDER + "save_" + saveNumber + ".sav"))
         {
             saveNumber++;
         }
         
         Debug.Log("Saving Game. Save Number is: " + saveNumber);
-        File.WriteAllText(SAVE_FOLDER + "save_" + saveNumber + ".txt", saveString);
-        Debug.Log("File Saved to: " + SAVE_FOLDER + "save_" + saveNumber + ".txt");
+        File.WriteAllText(SAVE_FOLDER + "save_" + saveNumber + ".sav", saveString);
+        Debug.Log("File Saved to: " + SAVE_FOLDER + "save_" + saveNumber + ".sav");
+    }
+    public static void Save(string saveString, string saveName)
+    {
+
+       
+        Debug.Log("Saving Game. Save Name is: " + saveName);
+        File.WriteAllText(SAVE_FOLDER + saveName, saveString);
+        Debug.Log("File Saved to: " + SAVE_FOLDER + saveName);
     }
 
+    public static string[] ListOfSaveFiles()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
+        FileInfo[] saveFiles = directoryInfo.GetFiles("*.sav");
+        
+        string[] saveFileString = new string[saveFiles.Length];
+        for(int i = 0; i < saveFileString.Length; i++)
+        {
+            saveFileString[i] = saveFiles[i].Name.ToString();
+          
+        }
 
+
+        return saveFileString;
+    }
     public static string Load()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
-        FileInfo[] saveFiles = directoryInfo.GetFiles("*.txt");
+        FileInfo[] saveFiles = directoryInfo.GetFiles("*.sav");
         FileInfo mostRecentFile = null;
         foreach (FileInfo fileInfo in saveFiles)
         {
@@ -83,14 +105,14 @@ public static class SaveSystem
     {
         Debug.Log("Saving High Scores...");
 
-        File.WriteAllText(SAVE_FOLDER + "HighScores.txt", saveHighScoreString);
-        Debug.Log("File Saved to: " + SAVE_FOLDER + "HighScores.txt");
+        File.WriteAllText(SAVE_FOLDER + "HighScores_" + SceneManagerScript.instance.sceneName + ".txt", saveHighScoreString);
+        Debug.Log("File Saved to: " + SAVE_FOLDER + "HighScores_" + SceneManagerScript.instance.sceneName + ".txt");
     }
 
     public static string LoadHighScores()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
-        FileInfo[] saveFiles = directoryInfo.GetFiles("HighScores.txt");
+        FileInfo[] saveFiles = directoryInfo.GetFiles("HighScores_" + SceneManagerScript.instance.sceneName + ".txt");
         FileInfo mostRecentFile = null;
         foreach (FileInfo fileInfo in saveFiles)
         {
@@ -124,5 +146,6 @@ public static class SaveSystem
             return null;
         }
     }
+
 
 }

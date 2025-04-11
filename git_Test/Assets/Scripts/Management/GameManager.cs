@@ -103,76 +103,13 @@ public class GameManager : MonoBehaviour
     public void Save(bool newSave)
     {
         SaveManager.instance.SaveGame(newSave);
-        /*
-        UpdateCoinCount();
 
-        SaveObject saveObject = new SaveObject
-        {
-            // This or saveManager to get a scene from the save?
-            sceneName = SceneManager.GetActiveScene().name,
-            saveTime = currentTime,
-            saveCoinAmount = coinAmount,
-            carPosition = carGameObject.transform.position,
-            carMovement = playerUnit,
-            saveCoinDictionary = coinDictionary
-
-        };
-        string json = JsonUtility.ToJson(saveObject);
-
-        SaveSystem.Save(json);
-        */
     }
 
     public void Load()
     {
-        SaveManager.instance.LoadGame();
-        
-        /*string saveString = SaveSystem.Load();
-        if(saveString != null)
-        {
-            Debug.Log("Loaded: " + saveString);
-
-            SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
-            // This or saveManager to get a scene from the save?
-            if(SceneManager.GetActiveScene().name != saveObject.sceneName)
-            {
-                Debug.Log("Scenename is: " + SceneManagerScript.instance.name);
-                SceneManagerScript.instance.LoadGameFromOtherScene(saveObject.sceneName);
-            }
-            
-            currentTime = saveObject.saveTime;
-            coinAmount = saveObject.saveCoinAmount;
-            this.GetComponent<DisplayText>().UpdateCoinCounter();
-
-            carGameObject.transform.position = saveObject.carPosition;
-            playerUnit = saveObject.carMovement;
-            coinDictionary = saveObject.saveCoinDictionary;
-            
-            foreach(var coin in coins)
-            {
-                coin.LoadCoinData();
-            }
-
-            
-        }
-        */
+        SaveManager.instance.LoadGame(true);
+       
     }
 
-    /*
-    private class SaveObject
-    {
-        // This or saveManager to get a scene from the save?
-        public string sceneName;
-        
-        public float saveTime;
-        
-        public int saveCoinAmount;
-        public Vector3 carPosition;
-        public CarMovement carMovement;
-        public SerializableDictionary<int, bool> saveCoinDictionary;
-
-
-    }
-    */
-    
 }

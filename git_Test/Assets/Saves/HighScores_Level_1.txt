@@ -1,8 +1,8 @@
 {"name":"Greg","coinCount":5,"time":19.600000381469728,"score":2109}
 {"name":"Big Carl","coinCount":20,"time":25.808046340942384,"score":1483}
+{"name":"hhhh","coinCount":20,"time":34.31930923461914,"score":1313}
 {"name":"Plaid","coinCount":20,"time":35.51191329956055,"score":1289}
 {"name":"Bob","coinCount":12,"time":22.450000762939454,"score":1034}
-{"name":"N/a","coinCount":0,"time":0.0,"score":0}
 {"name":"N/a","coinCount":0,"time":0.0,"score":0}
 {"name":"N/a","coinCount":0,"time":0.0,"score":0}
 {"name":"N/a","coinCount":0,"time":0.0,"score":0}

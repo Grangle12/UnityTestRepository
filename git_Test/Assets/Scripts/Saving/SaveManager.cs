@@ -18,6 +18,7 @@ public class SaveManager : MonoBehaviour
         }
         
     }
+
     public void SaveGame(bool newSave)
     {
         GameManager.instance.UpdateCoinCount();
@@ -37,14 +38,9 @@ public class SaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(saveObject);
         
 
-        //THE BELOW IS TO BE USED TO POPULATE A LIST OF BUTTONS FOR THE SAVE PANEL WITH SAVED GAMES ON THEM.
-       
-        
-        //MenuManager.instance.PopulateSaveMenu();
-        //string saveName = MenuManager.instance.ChooseSave();
         if (!newSave)
         {
-            Debug.Log("the name is: " + EventSystem.current.currentSelectedGameObject.GetComponentInChildren<TMP_Text>().text);
+           
             SaveSystem.Save(json, EventSystem.current.currentSelectedGameObject.GetComponentInChildren<TMP_Text>().text);
             MenuManager.instance.CloseAllMenus();
         }
@@ -55,17 +51,36 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    public void LoadGame()
+    //Loads file into a saveObject class
+    public void LoadGame(bool loadMostRecent)
     {
-
-        string saveString = SaveSystem.Load();
-        if (saveString != null)
+        if (loadMostRecent)
         {
-            Debug.Log("Loaded: " + saveString);
+            string saveString = SaveSystem.Load();
+            if (saveString != null)
+            {
+                Debug.Log("Loaded: " + saveString);
 
-            SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
-            // This or saveManager to get a scene from the save?
-            SceneManagerScript.instance.LoadGameFromOtherScene(saveObject);
+                SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
+                
+                //Save Object is then opened to actually load information into scene
+                SceneManagerScript.instance.LoadGameFromOtherScene(saveObject);
+            }
         }
+        else
+        {
+            string saveString = SaveSystem.Load(EventSystem.current.currentSelectedGameObject.GetComponentInChildren<TMP_Text>().text);
+            if (saveString != null)
+            {
+                
+                Debug.Log("Loaded: " + saveString);
+
+                SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
+                
+                //Save Object is then opened to actually load information into scene
+                SceneManagerScript.instance.LoadGameFromOtherScene(saveObject);
+            }
+        }
+        MenuManager.instance.CloseAllMenus();
     }
 }

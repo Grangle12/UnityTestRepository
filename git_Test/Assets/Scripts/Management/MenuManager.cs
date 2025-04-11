@@ -15,15 +15,24 @@ public class MenuManager : MonoBehaviour
     [SerializeField] public GameObject mainMenuCanvasGO;
     [SerializeField] public GameObject gameOverMenuCanvasGO;
     [SerializeField] public GameObject highScoreCanvasGO;
-    [SerializeField] public GameObject sGGO;
+    [SerializeField] public GameObject saveGGO;
+    [SerializeField] public GameObject loadGGO;
+    
+    
+    
+    
     [SerializeField] public GameObject sGSlotGO;
     [SerializeField] public GameObject sGSlotParentGO;
+    
+    [SerializeField] public GameObject loadGSlotParentGO;
 
 
     [SerializeField] public GameObject mainMenuFirst;
     [SerializeField] private GameObject settingsMenuFirst;
 
     List<GameObject> sGSlotGOList = new List<GameObject>();
+    List<GameObject> lGSlotGOList = new List<GameObject>();
+    
 
     private void Awake()
     {
@@ -88,26 +97,34 @@ public class MenuManager : MonoBehaviour
     {
         mainMenuCanvasGO.SetActive(true);
         highScoreCanvasGO.SetActive(false);
-        sGGO.SetActive(false);
+        saveGGO.SetActive(false);
+        loadGGO.SetActive(false);
         Debug.Log("OPENING MENU");
     }
 
     public void OpenSaveMenu()
     {
-        sGGO.SetActive(true);
+        saveGGO.SetActive(true);
+        loadGGO.SetActive(false);
         mainMenuCanvasGO.SetActive(false);
         highScoreCanvasGO.SetActive(false);
-        Debug.Log("OPENING MENU");
+        
         PopulateSaveMenu();
+    }
+    public void OpenLoadMenu()
+    {
+        loadGGO.SetActive(true);
+        saveGGO.SetActive(false);
+        mainMenuCanvasGO.SetActive(false);
+        highScoreCanvasGO.SetActive(false);
+        
+        PopulateLoadMenu();
     }
 
     public void PopulateSaveMenu()
     {
         string[] nameList = SaveSystem.ListOfSaveFiles();
-        for (int i = 0; i < nameList.Length; i++)
-        {
-            Debug.Log("saveFile String is: " + nameList[i]);
-        }
+
         sGSlotParentGO.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 30 * nameList.Length);
 
         bool inList = false;
@@ -133,10 +150,43 @@ public class MenuManager : MonoBehaviour
         }
 
     }
+    public void PopulateLoadMenu()
+    {
+        //sGSlotGOList.Clear();
+
+        string[] nameList = SaveSystem.ListOfSaveFiles();
+
+        loadGSlotParentGO.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 30 * nameList.Length);
+
+        bool inList = false;
+
+        for (int i = 0; i < nameList.Length; i++)
+        {
+            foreach (var GO in lGSlotGOList)
+            {
+                Debug.Log("we got: " + GO.GetComponentInChildren<TMP_Text>().text);
+                if (GO.GetComponentInChildren<TMP_Text>().text == nameList[i])
+                {
+                    inList = true;
+                }
+            }
+            if (!inList)
+            {
+                GameObject newGO = Instantiate(sGSlotGO, loadGSlotParentGO.transform);
+                newGO.GetComponentInChildren<TMP_Text>().text = nameList[i];
+                lGSlotGOList.Add(newGO);
+                newGO.GetComponent<Button>().onClick.AddListener(delegate () { SaveManager.instance.LoadGame(false); });
+            }
+            inList = false;
+        }
+
+    }
+
 
     public void CloseAllMenus()
     {
-        sGGO.SetActive(false);
+        saveGGO.SetActive(false);
+        loadGGO.SetActive(false);
         mainMenuCanvasGO.SetActive(false);
         highScoreCanvasGO.SetActive(false);
         Debug.Log("CLOSING MENU");

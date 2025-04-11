@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Generic save system that you can put a class into to save to text
 public static class SaveSystem 
 {
     private static readonly string SAVE_FOLDER = Application.dataPath + "/Saves/";
@@ -18,6 +20,7 @@ public static class SaveSystem
         }
     }
 
+    //This method saves the file name as "save_" + next incremented number of saveo needed to not overwrite saves, 
     public static void Save(string saveString)
     {
         
@@ -27,19 +30,21 @@ public static class SaveSystem
             saveNumber++;
         }
         
-        Debug.Log("Saving Game. Save Number is: " + saveNumber);
+     
         File.WriteAllText(SAVE_FOLDER + "save_" + saveNumber + ".sav", saveString);
-        Debug.Log("File Saved to: " + SAVE_FOLDER + "save_" + saveNumber + ".sav");
+
     }
+
+    //This Save function lets you choose the save name
+        //this is placed as a delegate to buttons populated in the save menu
     public static void Save(string saveString, string saveName)
     {
-
-       
-        Debug.Log("Saving Game. Save Name is: " + saveName);
         File.WriteAllText(SAVE_FOLDER + saveName, saveString);
-        Debug.Log("File Saved to: " + SAVE_FOLDER + saveName);
     }
 
+
+    //Returns a string[] of names of save files in the save directory
+        //Used to populate Save and Load menus
     public static string[] ListOfSaveFiles()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
@@ -51,10 +56,10 @@ public static class SaveSystem
             saveFileString[i] = saveFiles[i].Name.ToString();
           
         }
-
-
         return saveFileString;
     }
+    
+    //This method loads the last saved file in the save folder.
     public static string Load()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
@@ -87,28 +92,44 @@ public static class SaveSystem
             return null;
         }
 
-        /*if (File.Exists(SAVE_FOLDER + "save.txt"))
+    }
+
+    //This method loads the specific file name, this is placed as a delegate to buttons populated in the load menu 
+    public static string Load(string fileName)
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
+        FileInfo[] loadFiles = directoryInfo.GetFiles("*.sav");
+        FileInfo loadFile = null;
+        foreach (FileInfo fileInfo in loadFiles)
         {
-            string saveString = File.ReadAllText(SAVE_FOLDER + "save.txt");
+            if(fileInfo.Name == fileName)
+            {
+                loadFile = fileInfo;
+            }
+        }
+
+        if (loadFile != null)
+        {
+            string saveString = File.ReadAllText(loadFile.FullName);
             return saveString;
         }
         else
         {
             return null;
         }
-        */
+
     }
 
-    
-
+    //Method saves the highscores as a separate file for each scene. Implemented after getting a new HS.
     public static void SaveHighScores(string saveHighScoreString)
     {
         Debug.Log("Saving High Scores...");
 
         File.WriteAllText(SAVE_FOLDER + "HighScores_" + SceneManagerScript.instance.sceneName + ".txt", saveHighScoreString);
-        Debug.Log("File Saved to: " + SAVE_FOLDER + "HighScores_" + SceneManagerScript.instance.sceneName + ".txt");
+        
     }
 
+    //Loads the highscores from the relevant HS file. Used in Menu manager to populate the HS screen.
     public static string LoadHighScores()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);

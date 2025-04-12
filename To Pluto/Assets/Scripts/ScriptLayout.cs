@@ -32,14 +32,15 @@ public class ScriptLayout
 			//Triggers display text saying we've made it to this checkpoint, or game over
 			//triggers achievement potentially
 
-//Resource Scriptable Object
-	// Level - determines level required for tractor beams, miners, and engine to interact with, what type of fuel and rare resource to produce.
-	// Fuel - see Fuel Class below
-	// Rare resource - required for upgrades.
+//**********SCRIPT WRITTEN
+							//Resource Scriptable Object
+								// Level - determines level required for tractor beams, miners, and engine to interact with, what type of fuel and rare resource to produce.
+								// Fuel - see Fuel Class below
+								// Rare resource - required for upgrades.
 
-//Resource Spawner - spawns resource at random spot at a certain percentage.
-	// Spawn location - picks random spot in the height of the attached game object to spawn an asteroid
-	// Pick resource, every set amount of time (+/- so somewhat random looking) resources are spawned. Depending on the game phase you are in the % chance of the resource spawning is determined
+							//Resource Spawner - spawns resource at random spot at a certain percentage.
+								// Spawn location - picks random spot in the height of the attached game object to spawn an asteroid
+								// Pick resource, every set amount of time (+/- so somewhat random looking) resources are spawned. Depending on the game phase you are in the % chance of the resource spawning is determined
 	
 
 //Spaceship

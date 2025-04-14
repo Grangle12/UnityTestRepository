@@ -5,6 +5,9 @@ public class AsteroidClicker : MonoBehaviour
 {
     private Camera mainCamera;
 
+    float fuelGain = 50;
+    int resourceGain = 10;
+
     private void Awake()
     {
         mainCamera = Camera.main;
@@ -28,6 +31,17 @@ public class AsteroidClicker : MonoBehaviour
                 GameManager.instance.asteroidClickCounter++;
                 Debug.Log("you have destroyed: " + GameManager.instance.asteroidClickCounter + "asteroids!");
                 GameManager.instance.shipController.speedKmps += 500;
+                if (GameManager.instance.shipController.fuel + fuelGain < GameManager.instance.shipController.maxFuel)
+                {
+                    GameManager.instance.shipController.fuel += fuelGain;
+                    GameManager.instance.shipController.resourceCount += resourceGain;
+                }
+                else
+                {
+                    GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
+                    GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                }
+
             }
         }
 

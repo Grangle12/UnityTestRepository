@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5383263903782430386}
   - component: {fileID: 8813438669756148498}
   - component: {fileID: 251798514888635320}
+  - component: {fileID: -2626963557196459234}
   m_Layer: 0
   m_Name: ResourceGO
   m_TagString: Untagged
@@ -136,3 +137,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-2626963557196459234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2732925924372921158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 465c8620b15eb5a4bac0ecb5cb56b66d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuelAmt: 0
+  rareResourceAmt: 0
+  sprite: {fileID: 0}

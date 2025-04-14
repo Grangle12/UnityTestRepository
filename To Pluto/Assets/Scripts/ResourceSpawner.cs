@@ -51,6 +51,31 @@ public class ResourceSpawner : MonoBehaviour
         if (currentTime > randomTimeDistribution) 
         {
             GameObject newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+
+            int resourceLevelChance = Random.Range(0, 100);
+            if (resourceLevelChance < 90)
+            {
+                newGO.GetComponent<AsteroidResources>().resourceLevel = 0;
+                newGO.GetComponent<Renderer>().material.color = Color.blue;
+                newGO.GetComponent<AsteroidResources>().fuelAmt = resourceList[0].fuelAmt;
+                newGO.GetComponent<AsteroidResources>().rareResourceAmt = resourceList[0].rareResourceAmt;
+            }
+            else
+            {
+                newGO.GetComponent<AsteroidResources>().resourceLevel = 1;
+                newGO.GetComponent<AsteroidResources>().fuelAmt = resourceList[1].fuelAmt;
+                newGO.GetComponent<AsteroidResources>().rareResourceAmt = resourceList[1].rareResourceAmt;
+                
+
+                if (GameManager.instance.shipController.detectorLevel >= 1)
+                {
+                    newGO.GetComponent<Renderer>().material.color = Color.red;
+                }
+                else
+                {
+                    Debug.Log("spawned a red, but detector isnt high enough to see it");
+                }
+            }
             Rigidbody rb = newGO.GetComponent<Rigidbody>();
             rb.AddForce(new Vector3(-randomForce, 0, 0));
             rb.AddTorque(new Vector3(randomTorqueX, randomTorqueY, randomTorqueZ));

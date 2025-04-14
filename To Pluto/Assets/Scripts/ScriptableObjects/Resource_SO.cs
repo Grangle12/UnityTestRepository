@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Resource_SO", menuName = "Scriptable Objects/Resource_SO")]
 public class Resource_SO : ScriptableObject
 {
+    public string resourceName;
     public int level;
     
     public float fuelAmt;

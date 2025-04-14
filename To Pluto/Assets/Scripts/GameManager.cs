@@ -1,36 +1,24 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
+    public DisplayManager displayManager;
+
     public SpaceShipController shipController;
+
 
     public float currentTime = 0;
     
     
     public int asteroidClickCounter;
-    
-    public TMP_Text playerPos_Text;
-    public TMP_Text playerSpeed_Text;
-    public TMP_Text currentTime_Text;
-    public TMP_Text distTraveled_Text;
-    public TMP_Text distToNextChkPnt_Text;
-    public TMP_Text timeToNextChkPnt_Text;
+    public int plutoId;
 
-
-    //to be replaced with checkPoint SO
-    public long mercuryPos  = 5790;      //*10^4
-    public long venusPos    = 10820;     //*10^4
-    public long earthPos    = 14960;     //*10^4
-    public long marsPos     = 22800;     //*10^4
-    public long jupiterPos  = 77850;     //*10^4
-    public long saturnPos   = 143200;    //*10^4
-    public long uranusPos   = 286700;    //*10^4
-    public long neptunePos  = 451500;    //*10^4
-    public long plutoPos    = 590640;    //*10^4
-
-    bool testBool = true;
+    public List<CheckPointSO> checkPointList = new List<CheckPointSO>();
 
     private void Awake()
     {
@@ -42,7 +30,8 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        displayManager = this.GetComponent<DisplayManager>();
+        SortCheckPointList();
     }
 
     // Update is called once per frame
@@ -50,85 +39,99 @@ public class GameManager : MonoBehaviour
     {
         currentTime += Time.deltaTime;
 
-        currentTime_Text.text = "Elapsed Time: " + currentTime.ToString("f2");
+        UpdatePositionInformation();
+
+    }
+    void UpdatePositionInformation()
+    {
         
-        playerSpeed_Text.text = shipController.speedKmps.ToString("f0") + " km/hr";
+        DistanceToNextCheckPoint();
+
+
+        TimeToCheckpoint(displayManager.timeToPluto_Text, checkPointList[plutoId]);
+
+    }
+    
+    private void SortCheckPointList()
+    {
+        List<CheckPointSO> tempCheckPointList = checkPointList.OrderBy(x => x.distanceFromSun).ToList();
         
-        playerPos_Text.text = (shipController.playerPosition).ToString("f0") + " km from the Sun"; // + "*10^4 km";
-               
-        distTraveled_Text.text = "Distance Traveled: " + "\n" + (shipController.playerPosition - shipController.playerStartPosition).ToString("f0") + " km";
+        checkPointList = tempCheckPointList;
+        for (int i = 0; i < checkPointList.Count; i++)
+        {
+            if (GameManager.instance.checkPointList[i].distanceFromSun < shipController.playerPosition)
+            {
+                GameManager.instance.checkPointList[i].hasArrived = true;
+            }
+            else
+            {
+                GameManager.instance.checkPointList[i].hasArrived = false;
+            }
 
-        if (shipController.playerPosition < (marsPos * 10000))
-        {
-            distToNextChkPnt_Text.text = ((long)(marsPos * 10000) - shipController.playerPosition).ToString("f0") + "\n" + " Remaining distance to Mars";
+            if (checkPointList[i].checkPointName == "Pluto")
+            {
+                plutoId = i;
+            }
         }
-        else if (shipController.playerPosition < (jupiterPos * 10000))
+    }
+    
+    
+    private void DistanceToNextCheckPoint()
+    {
+        for(int i = 0; i < checkPointList.Count; i++)
         {
-            distToNextChkPnt_Text.text = ((long)(jupiterPos * 10000) - shipController.playerPosition).ToString("f0") + "\n" + " Remaining distance to Jupiter";
+           
+            
+            if (checkPointList[i].distanceFromSun > shipController.playerPosition)
+            {
+    
+                displayManager.distToNextChkPnt_Text.text = (checkPointList[i].distanceFromSun - shipController.playerPosition).ToString("f0")  + " Remaining distance to " + checkPointList[i].checkPointName;
+                
+                TimeToCheckpoint(displayManager.timeToNextChkPnt_Text,checkPointList[i]);
+                return;
+            }
+            else
+            {
+                //Check if Reached Checkpoint for first time
+                if(!checkPointList[i].hasArrived)
+                {
+                    Debug.Log("CONGRATULATIONS ON MAKING IT TO " + checkPointList[i].checkPointName);
+                    checkPointList[i].hasArrived = true;
+                }
+            }
         }
-        else if (shipController.playerPosition < (saturnPos * 10000))
-        {
-            distToNextChkPnt_Text.text = ((long)(saturnPos * 10000) - shipController.playerPosition).ToString("f0") + "\n" + " Remaining distance to Saturn";
-        }
-        else if (shipController.playerPosition < (uranusPos * 10000))
-        {
-            distToNextChkPnt_Text.text = ((long)(uranusPos * 10000) - shipController.playerPosition).ToString("f0") + "\n" + " Remaining distance to Uranus";
-        }
-        else if (shipController.playerPosition < (neptunePos * 10000))
-        {
-            distToNextChkPnt_Text.text = ((long)(neptunePos * 10000) - shipController.playerPosition).ToString("f0") + "\n" + " Remaining distance to neptune";
-        }
-        else
-        {
-            distToNextChkPnt_Text.text = ((long)(plutoPos * 10000) - shipController.playerPosition).ToString("f0") + "\n" + " Remaining distance to pluto";
-        }
+    }
 
-        long timeToNextCheckpoint = ((((long)(plutoPos * 10000) - shipController.playerPosition) / shipController.speedKmps));
-        float timeToNextCheckpointFloat = 0f;
-        if (timeToNextCheckpoint <= 0)
-        {
-            timeToNextCheckpointFloat = (((float)(plutoPos) - shipController.playerPosition / 10000) / (shipController.speedKmps / 10000));
-        }
+    private void TimeToCheckpoint(TMP_Text textBox, CheckPointSO checkPointSO)
+    {
+        double timeToNextCheckpoint = (checkPointSO.distanceFromSun - shipController.playerPosition) / shipController.speedKmps;
 
-
-            //Shows time in years
-            if (timeToNextCheckpoint / 24 / 365 > 0)
+        // Shows time in years
+        if (timeToNextCheckpoint / 24 / 365 > 1)
         {
 
-            timeToNextChkPnt_Text.text = ((((long)(plutoPos * 10000) - shipController.playerPosition) / shipController.speedKmps) / 24 / 365).ToString() + "\n" + "years remaining to pluto";
+            textBox.text = (timeToNextCheckpoint / 24 / 365).ToString("f2") + " years remaining to " + checkPointSO.checkPointName;
         }
         //shows time in days
-        else if (timeToNextCheckpoint / 24 > 0)
+        else if (timeToNextCheckpoint / 24 > 1)
         {
-            timeToNextChkPnt_Text.text = ((((long)(plutoPos * 10000) - shipController.playerPosition) / shipController.speedKmps) / 24).ToString() + "\n" + "days remaining to pluto";
+            textBox.text = ((timeToNextCheckpoint) / 24).ToString("f2") + " days remaining to " + checkPointSO.checkPointName;
         }
-        else if (timeToNextCheckpoint > 0)
+        else if (timeToNextCheckpoint > 1)
         {
-            timeToNextChkPnt_Text.text = ((((long)(plutoPos * 10000) - shipController.playerPosition) / shipController.speedKmps)).ToString() + "\n" + "hours remaining to pluto";
+          
+            textBox.text = (timeToNextCheckpoint).ToString("f2") + " hours remaining to " + checkPointSO.checkPointName;
         }
-        else if (timeToNextCheckpoint == 0 && timeToNextCheckpointFloat * 60 > 0)
+        else if (timeToNextCheckpoint*60 > 1)
         {
-            timeToNextChkPnt_Text.text = (timeToNextCheckpointFloat * 60).ToString() + "\n" + "minutes remaining to pluto";
+            
+                textBox.text = (timeToNextCheckpoint * 60).ToString("f2") + " minutes remaining to " + checkPointSO.checkPointName;
+            
         }
         else
         {
-            timeToNextChkPnt_Text.text = (timeToNextCheckpointFloat * 60 * 60).ToString() + "\n" + "seconds remaining to pluto";
-        }
-
-
-        if (testBool)
-        {
-            test();
-            testBool = false;
+            textBox.text = (timeToNextCheckpoint * 60 * 60).ToString("f1") + " seconds remaining to" + checkPointSO.checkPointName;
         }
     }
 
-    private void test()
-    {
-        Debug.Log(((long)(plutoPos * 10000)).ToString());
-        Debug.Log(((long)(plutoPos * 10000) - shipController.playerPosition).ToString());
-        Debug.Log((((long)(plutoPos * 10000) - shipController.playerPosition) /shipController.speedKmps).ToString());
-        Debug.Log(((((long)(plutoPos * 10000) - shipController.playerPosition) /shipController.speedKmps)/24).ToString());
-        Debug.Log(((((long)(plutoPos * 10000) - shipController.playerPosition) /shipController.speedKmps)/24/365).ToString());
-    }
 }

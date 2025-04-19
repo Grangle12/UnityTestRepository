@@ -18,7 +18,8 @@ public class BuildEngine : MonoBehaviour
     bool currentlyUpgrading = false;
     bool currentlyUpgradingDetector = false;
     EngineSO engineToBuild;
-    
+    int engineUpgradeNumber;
+
 
     //[SerializeField] TMP_Text engineCountText;
     //[SerializeField] TMP_Text detectorLevelText;
@@ -41,17 +42,17 @@ public class BuildEngine : MonoBehaviour
         if (currentlyBuilding)
         {
             //NEED TO CHANGE THIS
-            displayManager.iconFillImage.fillAmount = (timer / engineToBuild.buildTime[engineToBuild.currentLevel + 1]);
+            displayManager.iconFillImage.fillAmount = (timer / engineToBuild.buildUpgradeTime[0]);
         }
         else if(currentlyUpgrading)
         {
-            //NEED TO CHANGE THIS
-            displayManager.upgradeIconFillImage.fillAmount = (timer / engineToBuild.buildTime[engineToBuild.currentLevel+1]);
+            
+            displayManager.engineResearchFillImages[engineUpgradeNumber].fillAmount = (timer / engineToBuild.buildUpgradeTime[engineToBuild.currentLevel+1]);
         }     
         else if(currentlyUpgradingDetector)
         {
             //NEED TO CHANGE THIS
-            displayManager.detectorFillImage.fillAmount = (timer / engineToBuild.buildTime[GameManager.instance.shipController.detectorLevel + 1]);
+            displayManager.detectorFillImage.fillAmount = (timer / engineToBuild.buildUpgradeTime[GameManager.instance.shipController.detectorLevel + 1]);
         }
     }
 
@@ -61,6 +62,7 @@ public class BuildEngine : MonoBehaviour
         if (engine.cost[0] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && GameManager.instance.shipController.engineList.Count < GameManager.instance.shipController.engineCountMax && !currentlyUpgrading && !currentlyUpgradingDetector)
         {
             Debug.Log("we got resources");
+            
             currentlyBuilding = true;
             StartCoroutine(BuildCoroutine(engine));
             timer = 0;
@@ -81,8 +83,8 @@ public class BuildEngine : MonoBehaviour
     IEnumerator BuildCoroutine(EngineSO engine)
     {
         
-        Debug.Log("coroutine Started be back in: " + engine.buildTime[engine.currentLevel + 1]);
-        yield return new WaitForSeconds(engine.buildTime[engine.currentLevel+1]);
+        Debug.Log("coroutine Started be back in: " + engine.buildUpgradeTime[0]);
+        yield return new WaitForSeconds(engine.buildUpgradeTime[0]);
 
         Debug.Log("coroutine ended");
         GameManager.instance.shipController.engineList.Add(Instantiate(engine));
@@ -93,31 +95,52 @@ public class BuildEngine : MonoBehaviour
         displayManager.iconFillImage.fillAmount = 0;
     }
 
-    public void UpdateEngine()
+    public void UpdateEngine(int engineNumber)
     {
-        EngineSO currentEngine = GameManager.instance.shipController.engineList[0];
-        if (currentEngine.cost[currentEngine.currentLevel +1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
+        if (engineNumber < GameManager.instance.shipController.engineList.Count && !currentlyUpgrading)
         {
-            currentlyUpgrading = true;
-            //Check lowest level engine
-           // for (int i = 0; i < GameManager.instance.shipController.engineList.Count; i++)
+            engineUpgradeNumber = engineNumber;
+            EngineSO currentEngine = GameManager.instance.shipController.engineList[engineNumber];
+            
+            if (currentEngine.cost[currentEngine.currentLevel + 1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
             {
-               // if (GameManager.instance.shipController.engineList[i].currentLevel == 1)
                 
+                //Check lowest level engine
+                // for (int i = 0; i < GameManager.instance.shipController.engineList.Count; i++)
                 {
-                    StartCoroutine(UpgradeCoroutine(currentEngine));
-                    timer = 0;
-                    engineToBuild = currentEngine;
-                    return;
+                    // if (GameManager.instance.shipController.engineList[i].currentLevel == 1)
+
+                    {
+                        if (currentEngine.currentLevel < currentEngine.currentResearchLevelFE)
+                        {
+                            if (currentEngine.currentLevel < currentEngine.maxLevel)
+                            {
+                                currentlyUpgrading = true;
+                                StartCoroutine(UpgradeCoroutine(currentEngine));
+                                timer = 0;
+                                engineToBuild = currentEngine;
+                               // displayManager.upgradeIconFillImage = fillImage;
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("Need to research to a higher level");
+                        }
+                    }
                 }
             }
+        }
+        else
+        {
+            Debug.Log("No engine here");
         }
     }
     IEnumerator UpgradeCoroutine(EngineSO currentEngine)
     {
         GameManager.instance.shipController.resourceCount -= currentEngine.cost[currentEngine.currentLevel+1];
 
-        yield return new WaitForSeconds(currentEngine.buildTime[currentEngine.currentLevel + 1]);
+        yield return new WaitForSeconds(currentEngine.buildUpgradeTime[currentEngine.currentLevel + 1]);
 
 
         currentEngine.currentLevel++;
@@ -125,7 +148,8 @@ public class BuildEngine : MonoBehaviour
         
   
         currentlyUpgrading = false;
-        displayManager.upgradeIconFillImage.fillAmount = 0;
+        displayManager.engineResearchFillImages[engineUpgradeNumber].fillAmount = 0;
+        displayManager.engineUpgradeTexts[engineUpgradeNumber].text = "LEVEL " + currentEngine.currentLevel;
     }
 
     public void UpgradeDetector()
@@ -150,7 +174,7 @@ public class BuildEngine : MonoBehaviour
     IEnumerator UpgradeDetectorCoroutine(EngineSO detector)
     {
         GameManager.instance.shipController.resourceCount -= detector.cost[GameManager.instance.shipController.detectorLevel + 1];
-        yield return new WaitForSeconds(detector.buildTime[GameManager.instance.shipController.detectorLevel +1]);
+        yield return new WaitForSeconds(detector.buildUpgradeTime[GameManager.instance.shipController.detectorLevel +1]);
         Debug.Log("finished!");
 
         GameManager.instance.shipController.detectorLevel++;

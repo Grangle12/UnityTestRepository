@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance { get; private set; }
     public DisplayManager displayManager;
+    public ResearchManager researchManager;
 
     public SpaceShipController shipController;
 

@@ -73,7 +73,7 @@ public class ResourceSpawner : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("spawned a red, but detector isnt high enough to see it");
+                   // Debug.Log("spawned a red, but detector isnt high enough to see it");
                 }
             }
             Rigidbody rb = newGO.GetComponent<Rigidbody>();

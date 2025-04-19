@@ -23,21 +23,25 @@ public class SpaceShipController : MonoBehaviour
     public int engineCountMax = 5;
 
     public EngineSO detector;
+    public EngineSO baseEngine;
+    public EnginePartStats baseEngineReference;
+
+    [Tooltip("Place 0's where there is no current Engine")]
+    public int[] engineLevelsStart;
+
     public int detectorLevel = 0;
 
+    //[HideInInspector] 
     public List<EngineSO> engineList = new List<EngineSO>();
+    public EnginePartStats [] enginepartArr = new EnginePartStats[5];
 
     float timer;
-
-
-
-
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+       
         //starting point is earth
         for (int i = 0; i < GameManager.instance.checkPointList.Count; i++)
         {
@@ -48,21 +52,28 @@ public class SpaceShipController : MonoBehaviour
             }
 
         }
+        InstantiateStartingEngineParts();
 
-        //Make new engineSO so not to affect original
-        List<EngineSO> tempEngineList = new List<EngineSO>();
-        
-        for(int i =0; i < engineList.Count; i++)
-        {
-            tempEngineList.Add(Instantiate(engineList[i]));
+        EngineSO tempEngine = baseEngine;
+        baseEngine = Instantiate(tempEngine);
 
-        }
+        EnginePartStats tempEnginePart = baseEngineReference;
+        baseEngineReference = Instantiate(tempEnginePart);
+
+        //engineLevelsStart = new int[engineCountMax];
+
         engineList.Clear();
-        for (int i = 0; i < tempEngineList.Count; i++)
+        for (int i = 0; i < engineLevelsStart.Length; i++)
         {
-            engineList.Add(tempEngineList[i]);
+            if (engineLevelsStart[i] != 0)
+            {
+                engineList.Add(Instantiate(baseEngine));
+            }
 
         }
+
+
+       
 
         detectorLevel = detector.currentLevel;
     }
@@ -104,5 +115,14 @@ public class SpaceShipController : MonoBehaviour
 
     }
 
+    void InstantiateStartingEngineParts()
+    {
+        EnginePartStats[] tempArr = enginepartArr;
+        
+        for(int i =0; i < tempArr.Length; i++)
+        {
+            enginepartArr[i] = Instantiate(tempArr[i]);
+        }
+    }
     
 }

@@ -13,9 +13,9 @@ public class TractorBeam : MonoBehaviour
             if (GameManager.instance.shipController.fuel + fuelAmount < GameManager.instance.shipController.maxFuel)
             {
                 GameManager.instance.shipController.fuel += fuelAmount;
-                Debug.Log("Gained : " + fuelAmount + " Fuel");
+                //Debug.Log("Gained : " + fuelAmount + " Fuel");
                 GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
-                Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
+                //Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
             }
             else
             {

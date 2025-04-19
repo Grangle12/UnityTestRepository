@@ -6,27 +6,44 @@ public class DisplayManager : MonoBehaviour
 {
 
     SpaceShipController shipController;
-    
-    public TMP_Text playerPos_Text;
-    public TMP_Text playerSpeed_Text;
+
+    [Header("GameManager")]
     public TMP_Text currentTime_Text;
     public TMP_Text distTraveled_Text;
     public TMP_Text distToNextChkPnt_Text;
     public TMP_Text timeToNextChkPnt_Text;
     public TMP_Text timeToPluto_Text;
 
+    [Header("SpaceShipController")]
+    public TMP_Text playerPos_Text;
+    public TMP_Text playerSpeed_Text;
     public TMP_Text fuelLevel_Text;
     public TMP_Text resourceCount_Text;
 
+    [Header("BuildEngine")]
     public TMP_Text engineCountText;
     public TMP_Text detectorLevelText;
 
+    [Header("Images")]
     public Image fuelImage;
     public Image resourceImage;
     public Image iconFillImage;
     public Image upgradeIconFillImage;
     public Image detectorFillImage;
 
+    [Header("Upgrade FillImages")]
+    public TMP_Text[] engineUpgradeTexts;
+    public Image[] engineResearchFillImages;
+
+    [Header("ResearchButtons")]
+    public Button[] researchButtons;
+
+    [Header("Menus")]
+    [SerializeField] GameObject researchMenu;
+
+
+    // [Header("Menus")]
+    // public GameObject upgradeMenu;
 
     private void Start()
     {
@@ -68,4 +85,12 @@ public class DisplayManager : MonoBehaviour
     {
         image.fillAmount = current / max;
     }
+
+    public void ToggleMenu(GameObject gameObject)
+    {
+        gameObject.SetActive(!gameObject.activeSelf);
+    }
+
+    
+
 }

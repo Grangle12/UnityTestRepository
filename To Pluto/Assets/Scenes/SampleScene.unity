@@ -3330,6 +3330,7 @@ MonoBehaviour:
   resourceImage: {fileID: 1041570946}
   iconFillImage: {fileID: 864272591}
   upgradeIconFillImage: {fileID: 1726678705}
+  upgradeButtonFillImage: {fileID: 0}
   detectorFillImage: {fileID: 1552585802}
   engineUpgradeTexts:
   - {fileID: 1775681526}
@@ -3364,8 +3365,11 @@ MonoBehaviour:
   - {fileID: 2086108299}
   - {fileID: 610459252}
   - {fileID: 1920434819}
-  partList: []
-  upgradeList: []
+  listOfResearchableParts:
+  - {fileID: 11400000, guid: e8a6a394d1be3ca428ab06a3795a5e26, type: 2}
+  - {fileID: 11400000, guid: 02db40b91669d0745992b4da5a250341, type: 2}
+  - {fileID: 11400000, guid: fa2180bbf4e33bc4dac12565f20dc6a4, type: 2}
+  - {fileID: 11400000, guid: 6568c1cf31a58da47960c8c113ae2433, type: 2}
 --- !u!1 &730663591
 GameObject:
   m_ObjectHideFlags: 0
@@ -4150,14 +4154,11 @@ MonoBehaviour:
   resourceCount: 70
   maxResourceCount: 100
   engineCountMax: 5
-  detector: {fileID: 11400000, guid: 6568c1cf31a58da47960c8c113ae2433, type: 2}
+  detector: {fileID: 0}
   baseEngine: {fileID: 11400000, guid: 9c94038a8fca164498ef8754b09e7e20, type: 2}
   baseEngineReference: {fileID: 1031067487116185731, guid: 3171883a880d2414a81446b381fe2618, type: 3}
   engineLevelsStart: 0100000001000000020000000000000000000000
   detectorLevel: 0
-  engineList:
-  - {fileID: 11400000, guid: 9c94038a8fca164498ef8754b09e7e20, type: 2}
-  - {fileID: 11400000, guid: 9c94038a8fca164498ef8754b09e7e20, type: 2}
   enginepartArr:
   - {fileID: 1031067487116185731, guid: 3171883a880d2414a81446b381fe2618, type: 3}
   - {fileID: 1031067487116185731, guid: 3171883a880d2414a81446b381fe2618, type: 3}

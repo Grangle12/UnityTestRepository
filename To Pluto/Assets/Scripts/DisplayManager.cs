@@ -29,6 +29,7 @@ public class DisplayManager : MonoBehaviour
     public Image resourceImage;
     public Image iconFillImage;
     public Image upgradeIconFillImage;
+    public Image upgradeButtonFillImage;
     public Image detectorFillImage;
 
     [Header("Upgrade FillImages")]
@@ -91,6 +92,6 @@ public class DisplayManager : MonoBehaviour
         gameObject.SetActive(!gameObject.activeSelf);
     }
 
-    
+
 
 }

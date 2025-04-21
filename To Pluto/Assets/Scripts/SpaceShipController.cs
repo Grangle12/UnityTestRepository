@@ -32,7 +32,7 @@ public class SpaceShipController : MonoBehaviour
     public int detectorLevel = 0;
 
     //[HideInInspector] 
-    public List<EngineSO> engineList = new List<EngineSO>();
+    //public List<EngineSO> engineList = new List<EngineSO>();
     public EnginePartStats [] enginepartArr = new EnginePartStats[5];
 
     float timer;
@@ -54,14 +54,15 @@ public class SpaceShipController : MonoBehaviour
         }
         InstantiateStartingEngineParts();
 
-        EngineSO tempEngine = baseEngine;
-        baseEngine = Instantiate(tempEngine);
+       // EngineSO tempEngine = baseEngine;
+       // baseEngine = Instantiate(tempEngine);
 
         EnginePartStats tempEnginePart = baseEngineReference;
         baseEngineReference = Instantiate(tempEnginePart);
 
         //engineLevelsStart = new int[engineCountMax];
 
+        /*
         engineList.Clear();
         for (int i = 0; i < engineLevelsStart.Length; i++)
         {
@@ -71,9 +72,9 @@ public class SpaceShipController : MonoBehaviour
             }
 
         }
+        */
 
-
-       
+           
 
         detectorLevel = detector.currentLevel;
     }
@@ -97,13 +98,14 @@ public class SpaceShipController : MonoBehaviour
             timer = 0;
 
             //Burn Fuel and Accelerate
-            for (int i = 0; i < engineList.Count; i++)
+            //for (int i = 0; i < engineList.Count; i++)
+            for (int i = 0; i < enginepartArr.Length; i++)
             {
                 if (fuel > 0)
                 {
                     //NEED TO CHANGE THIS 
-                    fuel -= (1/engineList[i].fuelEfficiency[0]);
-                    speedKmps += engineList[i].acceleration[0];
+                    fuel -= (1/enginepartArr[i].fuelEfficiency.GetValue());
+                    speedKmps += enginepartArr[i].acceleration.GetValue();
                 }
                 else
                 {

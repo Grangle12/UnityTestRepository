@@ -1,30 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Collections;
 
+
 public class ResearchManager : MonoBehaviour
 {
-    [SerializeField] List<Button> buttonList = new List<Button>();
-    [SerializeField] List<PartSO> partList = new List<PartSO>();
-    [SerializeField] List<PartStats> upgradeList = new List<PartStats>();
- 
-    //[SerializeField] List<bool> upgradeList = new List<bool>();
-
-    //[SerializeField] GameObject researchPanel;
-
     DisplayManager displayManager;
 
-    List<int> resrchList = new List<int>();
+    [SerializeField] List<Button> buttonList = new List<Button>();
 
-    float resrchSpeed = 1.5f;
+    [SerializeField] List<PartSO> listOfResearchableParts;
+    
     float resrchtime = 5f;
 
     float timer = 0;
 
-    bool updateButton1 = false;
-    bool globalRsrchUpdate = false;
+    bool researching = false;
     bool alreadyPopulated = false;
+
+    PartSO research1, research2, research3;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,47 +33,82 @@ public class ResearchManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        if (globalRsrchUpdate)
+        
+        if (researching)
         {
-            
+            timer += Time.deltaTime;
             //displayManager.researchButtons[0].transform.Find("FillImage").GetComponent<Image>().fillAmount = (timer / resrchtime);
 
-            UpdateFillAmount(displayManager.researchButtons[0].transform.Find("FillImage").GetComponent<Image>(), resrchtime);
+            UpdateFillAmount(displayManager.upgradeButtonFillImage, timer/resrchtime);
         }
-    }
-
-    public void SetGlobalResrchUpdate(bool setReserchUpdate)
-    {
-        globalRsrchUpdate = setReserchUpdate;
-    }
-
-    public bool GetGlobalResrchUpdate()
-    {
-        return globalRsrchUpdate;
+        
     }
 
     void UpdateFillAmount(Image image, float rsrchTime)
     {
-        image.fillAmount = timer / rsrchTime;
+        image.fillAmount = rsrchTime;
     }
     //This chooses 3 random researches to research
     public void PopulateResearch()
     {
-        if (!alreadyPopulated)
-        {
-            buttonList[0].onClick.AddListener(() => UpgradePartSO(1));
-            for (int i = 0; i < buttonList.Count; i++)
-            {
+        int a;
 
-                // researchPanel.SetActive(!researchPanel.activeSelf);
-                
-                //buttonList[1].onClick.AddListener(ResearchEngineEfficiency);
-                //buttonList[2].onClick.AddListener(ResearchProbeLevel);
+        List<PartSO> TempList1 = new List<PartSO>();
+
+        //Debug.Log(listOfResearchableParts.Count + " is researchableparts count");
+        //Only show research that is below max level
+        for(int i = 0; i < listOfResearchableParts.Count; i++)
+        {
+            if(listOfResearchableParts[i].currentLevel < listOfResearchableParts[i].maxLevel)
+            {
+                TempList1.Add(listOfResearchableParts[i]);
+               // Debug.Log("Part Added: " + listOfResearchableParts[i].partName);
             }
         }
+        //Debug.Log(TempList1.Count + " is templist count");
 
-        
+        //Assing research randomly to buttons
+        for (int i = 0; i < buttonList.Count; i++)
+        {
+            if (TempList1.Count > 0)
+            {
+                a = Random.Range(0, TempList1.Count - 1);
+                for (int y = 0; y < listOfResearchableParts.Count; y++)
+                {
+                    
+
+                    if (listOfResearchableParts[y].partName == TempList1[a].partName)
+                    {
+                        //Debug.Log("were saying " + listOfResearchableParts[y].partName + " is equal to " + TempList1[a].partName + " and i, y =" + i+ ", " + y);
+
+                        buttonList[i].onClick.AddListener(delegate { AssignFillImage(EventSystem.current.currentSelectedGameObject); });
+                        buttonList[i].onClick.AddListener(() => UpgradePartSO(listOfResearchableParts[y]));
+                        buttonList[i].transform.gameObject.GetComponent<Image>().sprite = listOfResearchableParts[y].icon;
+                        
+
+                        Debug.Log(buttonList[i].gameObject + " is supposed to be the fill image ");
+
+                        TempList1.Remove(TempList1[a]);
+                      //  Debug.Log(TempList1.Count + " is templist count");
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Out of Research to assign!");
+            }
+        }
+    }
+
+    public void AssignFillImage(GameObject gameObject)
+    {
+
+        if (!researching)
+        {
+            Debug.Log("Got here, object is:" + gameObject);
+            displayManager.upgradeButtonFillImage = gameObject.transform.Find("FillImage").GetComponent<Image>();
+        }
     }
 
     public void UnPopulateResearch()
@@ -86,140 +119,31 @@ public class ResearchManager : MonoBehaviour
         }
     }
 
-    public void UpgradePartSO(int resrchNum)
+    public void UpgradePartSO(PartSO part)
     {
-        Debug.Log("Got to UpgradePartSO, the number is: " + resrchNum);
-        //Check if any Other research is going, separating local and global if we want to have multiple research happening at somepoint
-        if (!globalRsrchUpdate)
+        if (!researching)
         {
-            globalRsrchUpdate = true;
-
-
-            //research engineFuelEfficiency
-            if (resrchNum == 1)
+            Debug.Log(part);
+            if (GameManager.instance.shipController.resourceCount >= part.cost[part.currentLevel])
             {
-                timer = 0;
-
-                //put in coroutine
-                if (GameManager.instance.shipController.baseEngineReference.currentFuelEfficiencyLevel < GameManager.instance.shipController.baseEngineReference.maxFuelEfficiencyResearchLevel)
-                {
-                    resrchtime = GameManager.instance.shipController.baseEngineReference.buildUpgradeTime[GameManager.instance.shipController.baseEngineReference.fuelEfficiency.GetCurrentLevel()];
-
-                    StartCoroutine(ResearchCoroutine(GameManager.instance.shipController.baseEngineReference, GameManager.instance.shipController.baseEngineReference.fuelEfficiency));
-                    
-                }
-
-            }
-            else
-            {
-                globalRsrchUpdate = false;
+                Debug.Log("researching");
+                GameManager.instance.shipController.resourceCount -= part.cost[part.currentLevel];
+                researching = true;
+                StartCoroutine(ResearchCoroutine(part));
             }
         }
-
     }
-    IEnumerator ResearchCoroutine(PartStats part, Stat stat)
+    IEnumerator ResearchCoroutine(PartSO part)
     {
-        int timeSlot = part.currentLevel;
+        resrchtime = part.buildUpgradeTime[part.currentLevel];
+        Debug.Log("please wait..." + part.buildUpgradeTime[part.currentLevel]);
+        yield return new WaitForSeconds(part.buildUpgradeTime[part.currentLevel]);
 
-        if (timeSlot < part.buildUpgradeTime.Length)
-        {
-            yield return new WaitForSeconds(part.buildUpgradeTime[timeSlot]);
-
-            stat.LevelUp();
-            globalRsrchUpdate = false;
-            Debug.Log("Research of " + part + " with stat: " + stat + " is complete.");
-        }
-        else
-        {
-            Debug.LogWarning("There are not enough upgrade times in the array to match the current level!");
-        }
-
-       
-    }
-    /*
-    // OLDER STUFF
-    public void ResearchEngineLevel()
-    {
+        part.currentLevel++;
         timer = 0;
-        
-        Debug.Log("Researching Engine level");
-        if(!updateButton1)
-        StartCoroutine(ResearchCoroutine("engineLevel", resrchEngineLevel));
-        updateButton1 = true;
-        //researchPanel.SetActive(false);
-        //UnPopulateResearch();
+        UpdateFillAmount(displayManager.upgradeButtonFillImage, timer / 0);
+        researching = false;
+        Debug.Log("Research of " + part + " is complete.");
     }
 
-    public void ResearchEngineEfficiency()
-    {
-        timer = 0;
-        Debug.Log("Researching Engine Efficiency level");
-        StartCoroutine(ResearchCoroutine("engineEfficiency", resrchEngineEfficiency));
-        //researchPanel.SetActive(false);
-        //UnPopulateResearch();
-    }
-
-    public void ResearchDetectorLevel()
-    {
-        timer = 0;
-        Debug.Log("Researching Detector level");
-        StartCoroutine(ResearchCoroutine("detector", resrchDetectorLevel));
-        //researchPanel.SetActive(false);
-        UnPopulateResearch();
-    }
-    public void ResearchProbeLevel()
-    {
-        timer = 0;
-        Debug.Log("Researching Probe level");
-        StartCoroutine(ResearchCoroutine("probe",resrchProbeLevel));
-        //researchPanel.SetActive(false);
-        UnPopulateResearch();
-    }
-
-    IEnumerator ResearchCoroutine(string researchType, int research)
-    {
-        
-        yield return new WaitForSeconds(resrchtime);
-        
-        if(researchType == "engineLevel")
-        {
-            if(GameManager.instance.shipController.baseEngine.currentResearchLevelFE < GameManager.instance.shipController.baseEngine.maxLevel)
-            {
-                GameManager.instance.shipController.baseEngine.currentResearchLevelFE++;
-                for(int i =0; i < GameManager.instance.shipController.engineList.Count; i++ )
-                {
-                    GameManager.instance.shipController.engineList[i].currentResearchLevelFE++;
-                    
-                }
-            if(GameManager.instance.shipController.baseEngineReference.currentFuelEfficiencyResearchLevel < GameManager.instance.shipController.baseEngineReference.maxFuelEfficiencyResearchLevel)
-                for (int i = 0; i < GameManager.instance.shipController.enginepartArr.Length; i++)
-                {
-                    GameManager.instance.shipController.enginepartArr[i].currentFuelEfficiencyResearchLevel++;
-                    //Debug.Log("Modified Fuel Eff is: " + GameManager.instance.shipController.enginepartArr[i].fuelEfficiency.GetValue());
-                }
-            }
-            else
-            {
-                Debug.LogWarning("TRYING TO UPGRADE PAST MAX LEVEL");
-            }
-            updateButton1 = false;
-            displayManager.researchButtons[0].transform.Find("FillImage").GetComponent<Image>().fillAmount = 0;
-            //resrchEngineLevel++;
-        }
-        else if (researchType == "engineEfficiency")
-        {
-            resrchEngineEfficiency++;
-        }
-        else if (researchType == "detector")
-        {
-            resrchDetectorLevel++;
-        }
-        else if (researchType == "probe")
-        {
-            resrchProbeLevel++;
-        }
-
-        Debug.Log("Research finished!!!");
-    }
-    */
 }

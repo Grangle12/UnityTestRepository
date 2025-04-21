@@ -28,7 +28,7 @@ public class BuildEngine : MonoBehaviour
     void Start()
     {
         displayManager = GameManager.instance.displayManager;
-        displayManager.engineCountText.text = GameManager.instance.shipController.engineList.Count.ToString() + "/" + GameManager.instance.shipController.engineCountMax;
+        displayManager.engineCountText.text = GetCurrentEngineCount() + "/" + GameManager.instance.shipController.engineCountMax;
         displayManager.detectorLevelText.text = GameManager.instance.shipController.detectorLevel.ToString();
 
         
@@ -56,10 +56,24 @@ public class BuildEngine : MonoBehaviour
         }
     }
 
+    //Get currentEngineCount
+    int GetCurrentEngineCount()
+    {
+        int count = 0;
+        for (int i = 0; i < GameManager.instance.shipController.enginepartArr.Length; i++)
+        {
+            if (GameManager.instance.shipController.enginepartArr[i].currentLevel > 0)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public void AddEngine(EngineSO engine)
     {
         //NEED TO CHANGE THIS
-        if (engine.cost[0] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && GameManager.instance.shipController.engineList.Count < GameManager.instance.shipController.engineCountMax && !currentlyUpgrading && !currentlyUpgradingDetector)
+        if (engine.cost[0] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && GetCurrentEngineCount() < GameManager.instance.shipController.engineCountMax && !currentlyUpgrading && !currentlyUpgradingDetector)
         {
             Debug.Log("we got resources");
             
@@ -74,7 +88,7 @@ public class BuildEngine : MonoBehaviour
         {
             Debug.Log("out of resources");
         }
-        if(GameManager.instance.shipController.engineList.Count >= GameManager.instance.shipController.engineCountMax)
+        if(GetCurrentEngineCount() >= GameManager.instance.shipController.engineCountMax)
         {
             Debug.Log("Max engine reached");
         }
@@ -87,20 +101,22 @@ public class BuildEngine : MonoBehaviour
         yield return new WaitForSeconds(engine.buildUpgradeTime[0]);
 
         Debug.Log("coroutine ended");
-        GameManager.instance.shipController.engineList.Add(Instantiate(engine));
+       // GameManager.instance.shipController.engineList.Add(Instantiate(engine));
         GameManager.instance.shipController.resourceCount -= engine.cost[0];
 
-        displayManager.engineCountText.text = GameManager.instance.shipController.engineList.Count.ToString() + "/" + GameManager.instance.shipController.engineCountMax;
+        displayManager.engineCountText.text = GetCurrentEngineCount() + "/" + GameManager.instance.shipController.engineCountMax;
         currentlyBuilding = false;
         displayManager.iconFillImage.fillAmount = 0;
     }
 
     public void UpdateEngine(int engineNumber)
     {
-        if (engineNumber < GameManager.instance.shipController.engineList.Count && !currentlyUpgrading)
+        if (engineNumber < GetCurrentEngineCount() && !currentlyUpgrading)
         {
             engineUpgradeNumber = engineNumber;
-            EngineSO currentEngine = GameManager.instance.shipController.engineList[engineNumber];
+
+            //I ADDED new ENGINESO just to get rid of error.
+            EngineSO currentEngine = new EngineSO();// = GameManager.instance.shipController.engineList[engineNumber];
             
             if (currentEngine.cost[currentEngine.currentLevel + 1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
             {

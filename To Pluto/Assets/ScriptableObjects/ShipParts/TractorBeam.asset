@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caaa7965c53e16c4d859a90ad549ee74, type: 3}
+  m_Name: TractorBeam
+  m_EditorClassIdentifier: 
+  partName: Tractor Beam
+  maxLevel: 5
+  cost: 050000000a00000010000000120000001600000021000000
+  buildUpgradeTime:
+  - 10
+  - 20
+  - 25
+  - 26
+  - 29
+  - 35
+  icon: {fileID: -3150840378349148026, guid: ec66a0e2575cb6041be6a3df45ec86c2, type: 3}

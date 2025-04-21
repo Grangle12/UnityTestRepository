@@ -18,7 +18,10 @@ public class Stat
     private int currentLevel;
     
     [SerializeField]
-    public int maxLevel;
+    private int maxLevel;
+
+    public Sprite icon;
+    public Color iconColor;
 
     public int GetCurrentLevel()
     {
@@ -32,6 +35,14 @@ public class Stat
         int finalValue = baseValue;
         modifiers.ForEach(X => finalValue += X);
         return finalValue;
+    }
+
+    public bool IsMaxLevel()
+    {
+        if (currentLevel == maxLevel)
+            return true;
+        else
+            return false;
     }
     public void LevelUp()
     {

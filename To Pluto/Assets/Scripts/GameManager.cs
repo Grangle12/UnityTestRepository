@@ -60,13 +60,13 @@ public class GameManager : MonoBehaviour
         checkPointList = tempCheckPointList;
         for (int i = 0; i < checkPointList.Count; i++)
         {
-            if (GameManager.instance.checkPointList[i].distanceFromSun < shipController.playerPosition)
+            if (checkPointList[i].distanceFromSun < shipController.playerPosition)
             {
                 GameManager.instance.checkPointList[i].hasArrived = true;
             }
             else
             {
-                GameManager.instance.checkPointList[i].hasArrived = false;
+                checkPointList[i].hasArrived = false;
             }
 
             if (checkPointList[i].checkPointName == "Pluto")

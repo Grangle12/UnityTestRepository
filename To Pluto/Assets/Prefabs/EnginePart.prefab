@@ -63,24 +63,14 @@ MonoBehaviour:
     levelValue: f4010000dc050000a00f00007017000010270000
     modifiers: 
     currentLevel: 0
-    maxLevel: 0
-    upgradeTime: []
+    maxLevel: 5
+    icon: {fileID: -3366964903582057673, guid: bfafc9234c2a481459b23b87635e0af8, type: 3}
+    iconColor: {r: 1, g: 0, b: 0, a: 1}
   fuelEfficiency:
     baseValue: 1
     levelValue: 0100000002000000030000000500000008000000
     modifiers: 
     currentLevel: 0
     maxLevel: 5
-    upgradeTime:
-    - 5
-    - 7
-    - 10
-    - 12
-    - 15
-  currentAccelerationLevel: 1
-  currentFuelEfficiencyLevel: 1
-  currentAccelerationResearchLevel: 2
-  currentFuelEfficiencyResearchLevel: 2
-  maxAccelerationResearchLevel: 5
-  maxFuelEfficiencyResearchLevel: 5
-  accLvlBonus: f4010000dc050000a00f000028230000983a0000
+    icon: {fileID: -3366964903582057673, guid: bfafc9234c2a481459b23b87635e0af8, type: 3}
+    iconColor: {r: 0.2472086, g: 0, b: 1, a: 1}

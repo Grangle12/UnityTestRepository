@@ -28,6 +28,25 @@ public class ResearchManager : MonoBehaviour
     void Start()
     {
         displayManager = GameManager.instance.displayManager;
+
+        List<PartSO> TempList1 = new List<PartSO>();
+
+        for (int i = 0; i < listOfResearchableParts.Count; i++)
+        {
+            TempList1.Add(listOfResearchableParts[i]);
+            
+
+        }
+        
+        listOfResearchableParts.Clear();
+
+        for (int i = 0; i < TempList1.Count; i++)
+        {
+            listOfResearchableParts.Add(Instantiate(TempList1[i]));
+
+        }
+        
+
     }
 
     // Update is called once per frame
@@ -140,10 +159,30 @@ public class ResearchManager : MonoBehaviour
         yield return new WaitForSeconds(part.buildUpgradeTime[part.currentLevel]);
 
         part.currentLevel++;
+        SetMaxLevelOfPart(part);
+
         timer = 0;
         UpdateFillAmount(displayManager.upgradeButtonFillImage, timer / 0);
         researching = false;
         Debug.Log("Research of " + part + " is complete.");
     }
-
+    public void SetMaxLevelOfPart(PartSO part)
+    {
+        if (part.GetType() == typeof(EnginePartSO))
+        {
+            Debug.Log("Were an engine");
+            for (int i = 0; i < GameManager.instance.shipController.enginePartSOList.Count; i++)
+            {
+                GameManager.instance.shipController.enginePartSOList[i].maxLevel++;// = part.currentLevel;
+            }
+        }
+        else if (part.GetType() == typeof(ThrusterPartSO))
+        {
+            Debug.Log("Were a thruster");
+            for (int i = 0; i < GameManager.instance.shipController.thrusterPartSOList.Count; i++)
+            {
+                GameManager.instance.shipController.thrusterPartSOList[i].maxLevel++;//= part.currentLevel;
+            }
+        }
+    }
 }

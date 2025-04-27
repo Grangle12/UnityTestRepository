@@ -9,17 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caaa7965c53e16c4d859a90ad549ee74, type: 3}
-  m_Name: Engine
+  m_Script: {fileID: 11500000, guid: 11cc41af76aa982428d643e0cc47167d, type: 3}
+  m_Name: EnginePartSO
   m_EditorClassIdentifier: 
   partName: Engine
-  maxLevel: 5
-  cost: 0a000000140000001e00000028000000320000003c000000
+  currentLevel: 1
+  maxLevel: 2
+  cost: 0a0000000c0000000f000000140000001e000000
   buildUpgradeTime:
-  - 5
   - 10
   - 15
-  - 20
-  - 25
+  - 18
   - 30
+  - 45
   icon: {fileID: -3366964903582057673, guid: bfafc9234c2a481459b23b87635e0af8, type: 3}
+  fuelEfficiency:
+  - 0.1
+  - 0.25
+  - 0.5
+  - 1
+  - 2
+  - 4

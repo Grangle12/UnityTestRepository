@@ -9,17 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caaa7965c53e16c4d859a90ad549ee74, type: 3}
-  m_Name: Thruster
+  m_Script: {fileID: 11500000, guid: 4eb8857c9792f0749990c537df5ed775, type: 3}
+  m_Name: ThrusterPartSO
   m_EditorClassIdentifier: 
-  partName: Thruster
-  maxLevel: 5
-  cost: 050000000a0000000f000000190000001e00000020000000
+  partName: 
+  currentLevel: 1
+  maxLevel: 2
+  cost: 050000000a0000000c0000000e0000001000000014000000
   buildUpgradeTime:
+  - 10
   - 20
-  - 25
   - 30
   - 35
+  - 37
   - 40
-  - 50
   icon: {fileID: -1325269495787113969, guid: e41dc66783afca44aba5a28aa1a779b0, type: 3}
+  acceleration: f4010000ee020000e8030000e2040000dc050000c4090000

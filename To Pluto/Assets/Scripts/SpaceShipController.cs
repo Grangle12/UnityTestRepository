@@ -21,19 +21,25 @@ public class SpaceShipController : MonoBehaviour
 
     //ENGINE Scriptable Objects;
     public int engineCountMax = 5;
+    
+    public int tractorBeamCount = 1;
+    public int tractorBeamCountMax = 5;
 
-    public EngineSO detector;
-    public EngineSO baseEngine;
-    public EnginePartStats baseEngineReference;
 
     [Tooltip("Place 0's where there is no current Engine")]
     public int[] engineLevelsStart;
 
     public int detectorLevel = 0;
 
-    //[HideInInspector] 
-    //public List<EngineSO> engineList = new List<EngineSO>();
-    public EnginePartStats [] enginepartArr = new EnginePartStats[5];
+    public EnginePartSO enginePartSOReference;
+    public ThrusterPartSO thrusterPartSOReference;
+    public PartSO tractorPartSOReference;
+
+
+    public List<EnginePartSO> enginePartSOList = new List<EnginePartSO>();
+    public List<ThrusterPartSO> thrusterPartSOList = new List<ThrusterPartSO>();
+
+    public List<GameObject> tractorBeamGOList = new List<GameObject>();
 
     float timer;
 
@@ -54,29 +60,6 @@ public class SpaceShipController : MonoBehaviour
         }
         InstantiateStartingEngineParts();
 
-       // EngineSO tempEngine = baseEngine;
-       // baseEngine = Instantiate(tempEngine);
-
-        EnginePartStats tempEnginePart = baseEngineReference;
-        baseEngineReference = Instantiate(tempEnginePart);
-
-        //engineLevelsStart = new int[engineCountMax];
-
-        /*
-        engineList.Clear();
-        for (int i = 0; i < engineLevelsStart.Length; i++)
-        {
-            if (engineLevelsStart[i] != 0)
-            {
-                engineList.Add(Instantiate(baseEngine));
-            }
-
-        }
-        */
-
-           
-
-        detectorLevel = detector.currentLevel;
     }
 
     // Update is called once per frame
@@ -97,15 +80,15 @@ public class SpaceShipController : MonoBehaviour
          
             timer = 0;
 
-            //Burn Fuel and Accelerate
-            //for (int i = 0; i < engineList.Count; i++)
-            for (int i = 0; i < enginepartArr.Length; i++)
+            for (int i = 0; i < enginePartSOList.Count; i++)
             {
                 if (fuel > 0)
                 {
                     //NEED TO CHANGE THIS 
-                    fuel -= (1/enginepartArr[i].fuelEfficiency.GetValue());
-                    speedKmps += enginepartArr[i].acceleration.GetValue();
+                    if (i < enginePartSOList.Count)
+                        fuel -= (1 / enginePartSOList[i].fuelEfficiency[enginePartSOList[i].currentLevel]); //.GetValue()); ;
+                    if(i < thrusterPartSOList.Count)
+                        speedKmps += thrusterPartSOList[i].acceleration[thrusterPartSOList[i].currentLevel];
                 }
                 else
                 {
@@ -119,12 +102,22 @@ public class SpaceShipController : MonoBehaviour
 
     void InstantiateStartingEngineParts()
     {
-        EnginePartStats[] tempArr = enginepartArr;
+        List<EnginePartSO> tempList = enginePartSOList;
+        List<ThrusterPartSO> tempThrusterList = thrusterPartSOList;
         
-        for(int i =0; i < tempArr.Length; i++)
+        for(int i =0; i < tempList.Count; i++)
         {
-            enginepartArr[i] = Instantiate(tempArr[i]);
+            enginePartSOList[i] = Instantiate(tempList[i]);
         }
+        
+        for (int i = 0; i < tempThrusterList.Count; i++)
+        {
+            thrusterPartSOList[i] = Instantiate(tempThrusterList[i]);
+        }
+        
+
+
+
     }
     
 }

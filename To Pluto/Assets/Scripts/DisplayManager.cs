@@ -22,19 +22,24 @@ public class DisplayManager : MonoBehaviour
 
     [Header("BuildEngine")]
     public TMP_Text engineCountText;
+    public TMP_Text tractorBeamCountText;
     public TMP_Text detectorLevelText;
 
     [Header("Images")]
     public Image fuelImage;
     public Image resourceImage;
     public Image iconFillImage;
+    public Image BuildEngineFillImage;
     public Image upgradeIconFillImage;
     public Image upgradeButtonFillImage;
     public Image detectorFillImage;
+    public Image tractorBeamFillImage;
 
     [Header("Upgrade FillImages")]
     public TMP_Text[] engineUpgradeTexts;
+    public TMP_Text[] thrusterUpgradeTexts;
     public Image[] engineResearchFillImages;
+    public Image[] thrusterResearchFillImages;
 
     [Header("ResearchButtons")]
     public Button[] researchButtons;

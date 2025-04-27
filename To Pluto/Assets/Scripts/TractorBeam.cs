@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TractorBeam : MonoBehaviour
 {
+    public PartSO tractorBeamPart;
 
     private void OnTriggerEnter(Collider other)
     {

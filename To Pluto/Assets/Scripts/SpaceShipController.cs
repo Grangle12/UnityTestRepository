@@ -23,7 +23,7 @@ public class SpaceShipController : MonoBehaviour
     public int engineCountMax = 5;
     
     public int tractorBeamCount = 1;
-    public int tractorBeamCountMax = 5;
+    public int tractorBeamCountMax = 20;
 
 
     [Tooltip("Place 0's where there is no current Engine")]
@@ -42,6 +42,8 @@ public class SpaceShipController : MonoBehaviour
     public List<GameObject> tractorBeamGOList = new List<GameObject>();
 
     float timer;
+
+    [SerializeField] private GameObject floatingTextPrefab;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -120,4 +122,15 @@ public class SpaceShipController : MonoBehaviour
 
     }
     
+    public void ShowFloatingText(string text, Color color)
+    {
+        if(floatingTextPrefab)
+        {
+            float randX = Random.Range(-0.5f, 0.5f);
+            float randY = Random.Range(-0.5f, 0.5f);
+            GameObject prefab = Instantiate(floatingTextPrefab, transform.position + (new Vector3(randX, randY, 0)), Quaternion.identity);
+            prefab.GetComponentInChildren<TextMesh>().text = text;
+            prefab.GetComponentInChildren<TextMesh>().color = color;
+        }
+    }
 }

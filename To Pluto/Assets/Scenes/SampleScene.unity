@@ -974,7 +974,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1/7
+  m_text: 1/5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1692,6 +1692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tractorBeamPart: {fileID: 0}
+  tractoringSpeed: 1
 --- !u!65 &291441375
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3742,6 +3743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tractorBeamPart: {fileID: 0}
+  tractoringSpeed: 1
 --- !u!65 &595136895
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4678,13 +4680,16 @@ MonoBehaviour:
   fuelLevel_Text: {fileID: 1747892721}
   resourceCount_Text: {fileID: 604380479}
   engineCountText: {fileID: 474789817}
+  tractorBeamCountText: {fileID: 127909065}
   detectorLevelText: {fileID: 377574052}
   fuelImage: {fileID: 1788337608}
   resourceImage: {fileID: 1041570946}
   iconFillImage: {fileID: 864272591}
+  BuildEngineFillImage: {fileID: 864272591}
   upgradeIconFillImage: {fileID: 1726678705}
   upgradeButtonFillImage: {fileID: 1726678705}
   detectorFillImage: {fileID: 1552585802}
+  tractorBeamFillImage: {fileID: 1745695582}
   engineUpgradeTexts:
   - {fileID: 1775681526}
   - {fileID: 1125780923}
@@ -5584,7 +5589,7 @@ GameObject:
   - component: {fileID: 864272592}
   - component: {fileID: 864272591}
   m_Layer: 5
-  m_Name: FillImage
+  m_Name: BuildEngine_FillImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5770,6 +5775,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tractorBeamPart: {fileID: 0}
+  tractoringSpeed: 1
 --- !u!1 &896567473
 GameObject:
   m_ObjectHideFlags: 0
@@ -5921,7 +5927,7 @@ GameObject:
   - component: {fileID: 922402567}
   m_Layer: 0
   m_Name: SpaceShip
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5943,9 +5949,11 @@ MonoBehaviour:
   speedKmps: 10000
   fuel: 100
   maxFuel: 500
-  resourceCount: 70
+  resourceCount: 5
   maxResourceCount: 100
   engineCountMax: 5
+  tractorBeamCount: 1
+  tractorBeamCountMax: 5
   engineLevelsStart: 0100000001000000020000000000000000000000
   detectorLevel: 0
   enginePartSOReference: {fileID: 11400000, guid: 19d38174fe586874a9bb98b0c75472ef, type: 2}
@@ -5961,6 +5969,7 @@ MonoBehaviour:
   - {fileID: 706525365}
   - {fileID: 2051413529}
   - {fileID: 1606195338}
+  floatingTextPrefab: {fileID: 5892450025574379944, guid: 0143ddf0a4dfa094e95226842e1fb40e, type: 3}
 --- !u!136 &922402562
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6082,6 +6091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tractorBeamPart: {fileID: 0}
+  tractoringSpeed: 1
 --- !u!1 &931754417
 GameObject:
   m_ObjectHideFlags: 0
@@ -6341,7 +6351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec4facc1a722e25469a2ad09d002bdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tractorBeamPart: {fileID: 0}
+  tractorBeamPart: {fileID: 11400000, guid: fa2180bbf4e33bc4dac12565f20dc6a4, type: 2}
+  tractoringSpeed: 1
 --- !u!65 &947195991
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8479,6 +8490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tractorBeamPart: {fileID: 0}
+  tractoringSpeed: 1
 --- !u!212 &1339802781
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10177,6 +10189,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1742170245}
   m_CullTransparentMesh: 1
+--- !u!1 &1745695581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1745695584}
+  - component: {fileID: 1745695583}
+  - component: {fileID: 1745695582}
+  m_Layer: 5
+  m_Name: TractorBeam_FillImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1745695582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745695581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0.5754717, b: 0.07306027, a: 0.7921569}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 7482667652216324306, guid: e86e2341148b6a744840d4a409549c1c, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 1
+  m_FillAmount: 0
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1745695583
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745695581}
+  m_CullTransparentMesh: 1
+--- !u!224 &1745695584
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745695581}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1923415145}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 60.6, y: -60.050003}
+  m_SizeDelta: {x: 120, y: 120.1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1747892719
 GameObject:
   m_ObjectHideFlags: 0
@@ -11617,6 +11704,7 @@ RectTransform:
   m_Children:
   - {fileID: 2040689690}
   - {fileID: 127909064}
+  - {fileID: 1745695584}
   m_Father: {fileID: 1122432889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -11667,7 +11755,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1923415147}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 922402566}
+        m_TargetAssemblyTypeName: BuildEngine, Assembly-CSharp
+        m_MethodName: AddTractorBeam
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1923415147
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -126,7 +126,7 @@ public class BuildEngine : MonoBehaviour
     public void AddTractorBeam()
     {
         //NEED TO CHANGE THIS
-        if (GameManager.instance.shipController.tractorPartSOReference.cost[GameManager.instance.shipController.tractorBeamCount - 1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && GameManager.instance.shipController.tractorBeamCount < GameManager.instance.shipController.tractorBeamCountMax && !currentlyUpgrading && !currentlyUpgradingDetector)
+        if (GameManager.instance.shipController.tractorPartSOReference.cost[GameManager.instance.shipController.tractorBeamCount] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && GameManager.instance.shipController.tractorBeamCount < GameManager.instance.shipController.tractorBeamCountMax && !currentlyUpgrading && !currentlyUpgradingDetector)
         {
             Debug.Log("we got resources");
 
@@ -152,13 +152,14 @@ public class BuildEngine : MonoBehaviour
     {
         
         Debug.Log("Building Engine and Thruster. Time to Completion: " + engine.buildUpgradeTime[0]);
+        GameManager.instance.shipController.resourceCount -= engine.cost[0];
         yield return new WaitForSeconds(engine.buildUpgradeTime[0]);
 
         Debug.Log("Building Complete");
         
         GameManager.instance.shipController.enginePartSOList.Add(Instantiate(engine));
         GameManager.instance.shipController.thrusterPartSOList.Add(Instantiate(GameManager.instance.shipController.thrusterPartSOReference));
-        GameManager.instance.shipController.resourceCount -= engine.cost[0];
+
 
         displayManager.engineCountText.text = GetCurrentEngineCount() + "/" + GameManager.instance.shipController.engineCountMax;
         currentlyBuilding = false;
@@ -168,12 +169,14 @@ public class BuildEngine : MonoBehaviour
     {
         PartSO tractorBeam = GameManager.instance.shipController.tractorPartSOReference;
         Debug.Log("Building Tractor Beam: " + tractorBeam.buildUpgradeTime[GameManager.instance.shipController.tractorBeamCount]);
+        GameManager.instance.shipController.resourceCount -= GameManager.instance.shipController.tractorPartSOReference.cost[GameManager.instance.shipController.tractorBeamCount];
+
         yield return new WaitForSeconds(tractorBeam.buildUpgradeTime[GameManager.instance.shipController.tractorBeamCount]);                                                                                                                                                                                                                                                                                                                                                                                                                          
 
         Debug.Log("Building Complete");
 
         GameManager.instance.shipController.tractorBeamGOList[GameManager.instance.shipController.tractorBeamCount].SetActive(true);
-        GameManager.instance.shipController.resourceCount -= GameManager.instance.shipController.tractorPartSOReference.cost[GameManager.instance.shipController.tractorBeamCount];
+
         GameManager.instance.shipController.tractorBeamCount++;
                 
 

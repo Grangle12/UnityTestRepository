@@ -15,7 +15,7 @@ MonoBehaviour:
   partName: Tractor Beam
   currentLevel: 0
   maxLevel: 2
-  cost: 050000000a00000010000000120000001600000021000000
+  cost: 14000000190000001e00000023000000280000002d000000
   buildUpgradeTime:
   - 10
   - 20

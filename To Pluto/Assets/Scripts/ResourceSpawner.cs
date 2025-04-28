@@ -38,7 +38,7 @@ public class ResourceSpawner : MonoBehaviour
 
     void SpawnResource()
     {
-        float randomTimeDistribution = Random.Range(1, 5);
+        float randomTimeDistribution = Random.Range(spawnTime, 5);
         float randomDistribution = Random.Range(-5, 5);
         float randomForce = Random.Range(100, 500);
         float randomTorqueX = Random.Range(-10, 10);

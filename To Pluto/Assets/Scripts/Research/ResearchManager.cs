@@ -29,25 +29,11 @@ public class ResearchManager : MonoBehaviour
     {
         displayManager = GameManager.instance.displayManager;
 
-        List<PartSO> TempList1 = new List<PartSO>();
-
-        for (int i = 0; i < listOfResearchableParts.Count; i++)
-        {
-            TempList1.Add(listOfResearchableParts[i]);
-            
-
-        }
+        RecreateListOfResearchableParts();
         
-        listOfResearchableParts.Clear();
-
-        for (int i = 0; i < TempList1.Count; i++)
-        {
-            listOfResearchableParts.Add(Instantiate(TempList1[i]));
-
-        }
-        
-
     }
+
+  
 
     // Update is called once per frame
     void Update()
@@ -62,11 +48,30 @@ public class ResearchManager : MonoBehaviour
         }
         
     }
+    void RecreateListOfResearchableParts()
+    {
+        List<PartSO> TempList1 = new List<PartSO>();
 
+        for (int i = 0; i < listOfResearchableParts.Count; i++)
+        {
+            TempList1.Add(listOfResearchableParts[i]);
+
+
+        }
+
+        listOfResearchableParts.Clear();
+
+        for (int i = 0; i < TempList1.Count; i++)
+        {
+            listOfResearchableParts.Add(Instantiate(TempList1[i]));
+
+        }
+    }
     void UpdateFillAmount(Image image, float rsrchTime)
     {
         image.fillAmount = rsrchTime;
     }
+
     //This chooses 3 random researches to research
     public void PopulateResearch()
     {
@@ -91,10 +96,9 @@ public class ResearchManager : MonoBehaviour
         {
             if (TempList1.Count > 0)
             {
-                a = Random.Range(0, TempList1.Count - 1);
+                a = Random.Range(0, TempList1.Count);
                 for (int y = 0; y < listOfResearchableParts.Count; y++)
                 {
-                    
 
                     if (listOfResearchableParts[y].partName == TempList1[a].partName)
                     {
@@ -103,9 +107,6 @@ public class ResearchManager : MonoBehaviour
                         buttonList[i].onClick.AddListener(delegate { AssignFillImage(EventSystem.current.currentSelectedGameObject); });
                         buttonList[i].onClick.AddListener(() => UpgradePartSO(listOfResearchableParts[y]));
                         buttonList[i].transform.gameObject.GetComponent<Image>().sprite = listOfResearchableParts[y].icon;
-                        
-
-                        Debug.Log(buttonList[i].gameObject + " is supposed to be the fill image ");
 
                         TempList1.Remove(TempList1[a]);
                       //  Debug.Log(TempList1.Count + " is templist count");
@@ -182,6 +183,14 @@ public class ResearchManager : MonoBehaviour
             for (int i = 0; i < GameManager.instance.shipController.thrusterPartSOList.Count; i++)
             {
                 GameManager.instance.shipController.thrusterPartSOList[i].maxLevel++;//= part.currentLevel;
+            }
+        }
+        else if (part.partName == "Tractor Beam")
+        {
+            Debug.Log("Were a TractorBeam");
+            for (int i = 0; i < GameManager.instance.shipController.thrusterPartSOList.Count; i++)
+            {
+                GameManager.instance.shipController.tractorBeamCountMax++;//= part.currentLevel;
             }
         }
     }

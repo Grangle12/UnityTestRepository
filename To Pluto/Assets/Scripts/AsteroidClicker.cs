@@ -25,7 +25,7 @@ public class AsteroidClicker : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.collider != null)
+            if (hit.collider != null && hit.collider.gameObject.tag == "Asteroid")
             {
                 Destroy(hit.collider.gameObject);
                 GameManager.instance.asteroidClickCounter++;
@@ -33,6 +33,7 @@ public class AsteroidClicker : MonoBehaviour
                 GameManager.instance.shipController.speedKmps += 500;
                 if (GameManager.instance.shipController.fuel + fuelGain < GameManager.instance.shipController.maxFuel)
                 {
+                    GameManager.instance.shipController.ShowFloatingText(fuelGain.ToString(), Color.white);
                     GameManager.instance.shipController.fuel += fuelGain;
                     GameManager.instance.shipController.resourceCount += resourceGain;
                 }

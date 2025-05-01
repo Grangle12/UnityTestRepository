@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partName: Tractor Beam
   currentLevel: 0
-  maxLevel: 2
+  maxLevel: 1
   cost: 14000000190000001e00000023000000280000002d000000
   buildUpgradeTime:
   - 10

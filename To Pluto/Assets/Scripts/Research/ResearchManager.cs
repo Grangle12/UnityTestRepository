@@ -141,25 +141,54 @@ public class ResearchManager : MonoBehaviour
 
     public void UpgradePartSO(PartSO part)
     {
+        //PartSO gMPart =
+        //ScriptableObject.CreateInstance(PartSO part);
+
         if (!researching)
         {
-            Debug.Log(part);
-            if (GameManager.instance.shipController.resourceCount >= part.cost[part.currentLevel])
+            for(int i =0; i < listOfResearchableParts.Count; i++)
             {
-                Debug.Log("researching");
-                GameManager.instance.shipController.resourceCount -= part.cost[part.currentLevel];
-                researching = true;
-                StartCoroutine(ResearchCoroutine(part));
+                if( part.partName == listOfResearchableParts[i].partName)
+                {
+                    part = listOfResearchableParts[i];
+                    Debug.Log(part.partName + " is attempted to being researched");
+                }
+            }
+            if (part  != null)
+            {
+                if (GameManager.instance.shipController.resourceCount >= part.cost[part.currentLevel])
+                {
+                    Debug.Log("researching: " + part.partName);
+                    GameManager.instance.shipController.resourceCount -= part.cost[part.currentLevel];
+                    researching = true;
+                    StartCoroutine(ResearchCoroutine(part));
+                }
+                else
+                {
+                    Debug.Log("unable to research, the cost of " + part.partName + " is: " + part.cost[part.currentLevel]);
+                }
+            }
+            else
+            {
+                Debug.Log("No matching Part in the research List");
             }
         }
+        else
+        {
+            Debug.Log("Currently Researching another project");
+        }
     }
+    
+
+
     IEnumerator ResearchCoroutine(PartSO part)
     {
-        resrchtime = part.buildUpgradeTime[part.currentLevel];
-        Debug.Log("please wait..." + part.buildUpgradeTime[part.currentLevel]);
-        yield return new WaitForSeconds(part.buildUpgradeTime[part.currentLevel]);
+        //use of current level because level starts at 1 and not at 0
+        resrchtime = part.buildUpgradeTime[part.maxLevel];
+        Debug.Log("please wait..." + part.buildUpgradeTime[part.maxLevel]);
+        yield return new WaitForSeconds(part.buildUpgradeTime[part.maxLevel]);
 
-        part.currentLevel++;
+        part.maxLevel++;
         SetMaxLevelOfPart(part);
 
         timer = 0;
@@ -174,7 +203,7 @@ public class ResearchManager : MonoBehaviour
             Debug.Log("Were an engine");
             for (int i = 0; i < GameManager.instance.shipController.enginePartSOList.Count; i++)
             {
-                GameManager.instance.shipController.enginePartSOList[i].maxLevel++;// = part.currentLevel;
+                GameManager.instance.shipController.enginePartSOList[i].maxLevel = part.maxLevel;
             }
         }
         else if (part.GetType() == typeof(ThrusterPartSO))
@@ -182,15 +211,23 @@ public class ResearchManager : MonoBehaviour
             Debug.Log("Were a thruster");
             for (int i = 0; i < GameManager.instance.shipController.thrusterPartSOList.Count; i++)
             {
-                GameManager.instance.shipController.thrusterPartSOList[i].maxLevel++;//= part.currentLevel;
+                GameManager.instance.shipController.thrusterPartSOList[i].maxLevel = part.maxLevel;
             }
         }
         else if (part.partName == "Tractor Beam")
         {
             Debug.Log("Were a TractorBeam");
-            for (int i = 0; i < GameManager.instance.shipController.thrusterPartSOList.Count; i++)
+            //for (int i = 0; i < GameManager.instance.shipController.thrusterPartSOList.Count; i++)
             {
-                GameManager.instance.shipController.tractorBeamCountMax++;//= part.currentLevel;
+                GameManager.instance.shipController.tractorBeamCountMax = part.maxLevel;
+            }
+        }
+        else if (part.partName == "Detector")
+        {
+            Debug.Log("Were a detector");
+            //for (int i = 0; i < GameManager.instance.shipController.; i++)
+            {
+                GameManager.instance.shipController.detectorPartSOReference.maxLevel = part.maxLevel;
             }
         }
     }

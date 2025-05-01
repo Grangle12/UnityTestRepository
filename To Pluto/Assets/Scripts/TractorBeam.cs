@@ -59,13 +59,13 @@ public class TractorBeam : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not A ship: " + this.gameObject);
+            //Debug.Log("Not A ship: " + this.gameObject);
             if (other.gameObject.tag == "Asteroid" && !other.gameObject.GetComponent<AsteroidResources>().beingTractored) 
             {
                 asteroidGO = other.gameObject;
                 tractorbeamCollider.enabled = false;
                 
-                Debug.Log("currently Tractoring: ");
+                //Debug.Log("currently Tractoring: ");
                 if (!currentlyTractoring)
                 {
                     currentlyTractoring = true;

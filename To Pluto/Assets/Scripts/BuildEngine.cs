@@ -125,25 +125,33 @@ public class BuildEngine : MonoBehaviour
     }
     public void AddTractorBeam()
     {
+
         //NEED TO CHANGE THIS
-        if (GameManager.instance.shipController.tractorPartSOReference.cost[GameManager.instance.shipController.tractorBeamCount] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && GameManager.instance.shipController.tractorBeamCount < GameManager.instance.shipController.tractorBeamCountMax && !currentlyUpgrading && !currentlyUpgradingDetector)
+        if (GameManager.instance.shipController.tractorBeamCount < GameManager.instance.shipController.tractorBeamCountMax)
         {
-            Debug.Log("we got resources");
+            if (GameManager.instance.shipController.tractorPartSOReference.cost[GameManager.instance.shipController.tractorBeamCount] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
+            {
+                Debug.Log("we got resources");
 
-            currentlyBuilding = true;
-            StartCoroutine(BuildCoroutine());
-            timer = 0;
-            partToBuild = GameManager.instance.shipController.tractorPartSOReference;
-            displayManager.iconFillImage = displayManager.tractorBeamFillImage;
+                currentlyBuilding = true;
+                StartCoroutine(BuildCoroutine());
+                timer = 0;
+                partToBuild = GameManager.instance.shipController.tractorPartSOReference;
+                displayManager.iconFillImage = displayManager.tractorBeamFillImage;
 
+            }
+            else
+            {
+                Debug.Log("out of resources, you need " + GameManager.instance.shipController.tractorPartSOReference.cost[GameManager.instance.shipController.tractorBeamCount] + " and you have: " + GameManager.instance.shipController.resourceCount);
+            }
+            if (GetCurrentEngineCount() >= GameManager.instance.shipController.engineCountMax)
+            {
+                Debug.Log("Max engine reached");
+            }
         }
         else
         {
-            Debug.Log("out of resources");
-        }
-        if (GetCurrentEngineCount() >= GameManager.instance.shipController.engineCountMax)
-        {
-            Debug.Log("Max engine reached");
+            Debug.Log("Max tractor Beam count reached");
         }
     }
 
@@ -273,30 +281,31 @@ public class BuildEngine : MonoBehaviour
 
     public void UpgradeDetector()
     {
-        /*
-        EngineSO detector = GameManager.instance.shipController.detector;
+
+        PartSO detector = GameManager.instance.shipController.detectorPartSOReference;
 
         Debug.Log("clicked ");
         Debug.Log("clicked " + detector.cost[GameManager.instance.shipController.detectorLevel + 1]);
         Debug.Log("clicked " + GameManager.instance.shipController.resourceCount);
-
-        if (detector.cost[GameManager.instance.shipController.detectorLevel +1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
+        if (GameManager.instance.shipController.detectorLevel < detector.maxLevel)
         {
-            Debug.Log("got passed the if statement");
-
-            currentlyUpgradingDetector = true;
-            StartCoroutine(UpgradeDetectorCoroutine(detector));
-            engineToBuild = detector;
-            timer = 0;
+            if (detector.cost[GameManager.instance.shipController.detectorLevel + 1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
+            {
+                Debug.Log("got passed the if statement");
+                partToBuild = detector;
+                currentlyUpgradingDetector = true;
+                StartCoroutine(UpgradeDetectorCoroutine(detector));
+                //engineToBuild = detector;
+                timer = 0;
+            }
         }
-        */
     }
 
-    IEnumerator UpgradeDetectorCoroutine(EngineSO detector)
+    IEnumerator UpgradeDetectorCoroutine(PartSO detector)
     {
         GameManager.instance.shipController.resourceCount -= detector.cost[GameManager.instance.shipController.detectorLevel + 1];
         yield return new WaitForSeconds(detector.buildUpgradeTime[GameManager.instance.shipController.detectorLevel +1]);
-        Debug.Log("finished!");
+        Debug.Log("Detector build finished!");
 
         GameManager.instance.shipController.detectorLevel++;
         displayManager.detectorLevelText.text = GameManager.instance.shipController.detectorLevel.ToString();

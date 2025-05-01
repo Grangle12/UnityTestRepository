@@ -15,4 +15,6 @@ public class Resource_SO : ScriptableObject
     public Sprite sprite;
     public GameObject gameObject;
 
+    public Color color;
+
 }

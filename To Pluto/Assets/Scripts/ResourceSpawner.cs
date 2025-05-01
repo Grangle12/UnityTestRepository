@@ -50,37 +50,89 @@ public class ResourceSpawner : MonoBehaviour
 
         if (currentTime > randomTimeDistribution) 
         {
-            GameObject newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+            GameObject newGO;
 
             int resourceLevelChance = Random.Range(0, 100);
-            if (resourceLevelChance < 90)
+            if(GameManager.instance.shipController.detectorLevel == 0)
             {
-                newGO.GetComponent<AsteroidResources>().resourceLevel = 0;
-                newGO.GetComponent<Renderer>().material.color = Color.blue;
-                newGO.GetComponent<AsteroidResources>().fuelAmt = resourceList[0].fuelAmt;
-                newGO.GetComponent<AsteroidResources>().rareResourceAmt = resourceList[0].rareResourceAmt;
-            }
-            else
-            {
-                newGO.GetComponent<AsteroidResources>().resourceLevel = 1;
-                newGO.GetComponent<AsteroidResources>().fuelAmt = resourceList[1].fuelAmt;
-                newGO.GetComponent<AsteroidResources>().rareResourceAmt = resourceList[1].rareResourceAmt;
-                
+                newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                AssignAsteroidResource(newGO, resourceList[0]);
 
-                if (GameManager.instance.shipController.detectorLevel >= 1)
+            }
+            else if (GameManager.instance.shipController.detectorLevel == 1)
+            {
+                if (resourceLevelChance < 90)
                 {
-                    newGO.GetComponent<Renderer>().material.color = Color.red;
+                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[0]);
                 }
                 else
                 {
-                   // Debug.Log("spawned a red, but detector isnt high enough to see it");
+                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[1]);
                 }
             }
+            else if (GameManager.instance.shipController.detectorLevel == 2)
+            {
+                if (resourceLevelChance < 90)
+                {
+                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[0]);
+                }
+                else if (resourceLevelChance > 95)
+                {
+                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[1]);
+                }
+                else
+                {
+                    newGO = Instantiate(resourceList[2].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[2]);
+                }
+            }
+            else if (GameManager.instance.shipController.detectorLevel == 3)
+            {
+                if (resourceLevelChance < 85)
+                {
+                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[0]);
+                }
+                else if (resourceLevelChance > 85 && resourceLevelChance < 90)
+                {
+                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[1]);
+                }
+                else if (resourceLevelChance > 90 && resourceLevelChance < 95)
+                {
+                    newGO = Instantiate(resourceList[2].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[2]);
+                }
+                else
+                {
+                    newGO = Instantiate(resourceList[3].gameObject, randomPosition, Random.rotation);
+                    AssignAsteroidResource(newGO, resourceList[3]);
+                }
+            }
+            else
+            {
+                Debug.Log("We are at a higher level than anticipated....");
+                newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                AssignAsteroidResource(newGO, resourceList[0]);
+            }
+
             Rigidbody rb = newGO.GetComponent<Rigidbody>();
             rb.AddForce(new Vector3(-randomForce, 0, 0));
             rb.AddTorque(new Vector3(randomTorqueX, randomTorqueY, randomTorqueZ));
             currentTime = 0;
         }
+    }
+
+    private void AssignAsteroidResource(GameObject newGO, Resource_SO resource)
+    {
+      
+        newGO.GetComponent<Renderer>().material.color = resource.color;
+        newGO.GetComponent<AsteroidResources>().fuelAmt = resource.fuelAmt;
+        newGO.GetComponent<AsteroidResources>().rareResourceAmt = resource.rareResourceAmt;
     }
 
     private void OnTriggerEnter(Collider other)

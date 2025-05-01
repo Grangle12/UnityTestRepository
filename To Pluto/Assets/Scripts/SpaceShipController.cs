@@ -34,6 +34,7 @@ public class SpaceShipController : MonoBehaviour
     public EnginePartSO enginePartSOReference;
     public ThrusterPartSO thrusterPartSOReference;
     public PartSO tractorPartSOReference;
+    public PartSO detectorPartSOReference;
 
 
     public List<EnginePartSO> enginePartSOList = new List<EnginePartSO>();
@@ -106,7 +107,10 @@ public class SpaceShipController : MonoBehaviour
     {
         List<EnginePartSO> tempList = enginePartSOList;
         List<ThrusterPartSO> tempThrusterList = thrusterPartSOList;
-        
+        PartSO tempTractor = tractorPartSOReference;
+        PartSO tempDetector = detectorPartSOReference;
+
+
         for(int i =0; i < tempList.Count; i++)
         {
             enginePartSOList[i] = Instantiate(tempList[i]);
@@ -116,7 +120,9 @@ public class SpaceShipController : MonoBehaviour
         {
             thrusterPartSOList[i] = Instantiate(tempThrusterList[i]);
         }
-        
+
+        tractorPartSOReference = Instantiate(tempTractor);
+        detectorPartSOReference = Instantiate(tempDetector);
 
 
 

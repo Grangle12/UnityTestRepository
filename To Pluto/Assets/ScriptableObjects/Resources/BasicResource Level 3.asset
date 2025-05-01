@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e92b25f591a527f409e7c50e16d5d33e, type: 3}
-  m_Name: BasicResource
+  m_Name: BasicResource Level 3
   m_EditorClassIdentifier: 
-  resourceName: Resouce-1
-  level: 0
-  fuelAmt: 2
-  fuelAmtVariance: 1
+  resourceName: Resouce-4
+  level: 2
+  fuelAmt: 6
+  fuelAmtVariance: 6
   rareResourceAmt: 2
-  rareResourceAmtVariance: 1
+  rareResourceAmtVariance: 2.5
   sprite: {fileID: 7482667652216324306, guid: e86e2341148b6a744840d4a409549c1c, type: 3}
-  gameObject: {fileID: 2932366334223553559, guid: 26d3d4cfdefae8a4294bc7de967fbeda, type: 3}
-  color: {r: 0.17425251, g: 0, b: 1, a: 1}
+  gameObject: {fileID: 2732925924372921158, guid: d78c1de73ca1e9545b08f6637b2ffb77, type: 3}
+  color: {r: 1, g: 0, b: 0, a: 1}

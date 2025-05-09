@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3a0b9fc0658052c4481676d787428cb1
+guid: 15b33c2c3be9a8046a9678e8229bb1aa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9144824244010839270
-    second: Engine_1c_0
+      213: -703348852449357773
+    second: HandNet_3c_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,23 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Engine_1c_0
+      name: HandNet_3c_0
       rect:
         serializedVersion: 2
-        x: 396
-        y: 717
-        width: 400
-        height: 101
+        x: 1171
+        y: 343
+        width: 437
+        height: 515
       alignment: 9
-      pivot: {x: 0.9771135, y: 0.6305107}
+      pivot: {x: 0.9663432, y: 0.8740333}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6ec65a5d231f8ee70800000000000000
-      internalID: 9144824244010839270
+      spriteID: 330d398f1f33d36f0800000000000000
+      internalID: -703348852449357773
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4ed4a5b61a119c14392562b78d536a0c
+    spriteID: 1d6be28f9ce50614ba4c88dd20587374
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Engine_1c_0: 9144824244010839270
+      HandNet_3c_0: -703348852449357773
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

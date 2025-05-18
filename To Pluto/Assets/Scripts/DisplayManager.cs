@@ -69,7 +69,7 @@ public class DisplayManager : MonoBehaviour
         playerSpeed_Text.text = shipController.speedKmps.ToString("f0") + " km/hr";
         playerPos_Text.text = (shipController.playerPosition).ToString("f0") + " km from the Sun";
 
-        distTraveled_Text.text = "Distance Traveled: " + "\n" + (shipController.playerPosition - shipController.playerStartPosition).ToString("f0") + " km";
+        distTraveled_Text.text = "Distance Traveled: " + (shipController.playerPosition - shipController.playerStartPosition).ToString("f0") + " km";
 
         fuelLevel_Text.text = shipController.fuel + "/" + shipController.maxFuel;
         resourceCount_Text.text = (float)(shipController.resourceCount) + "/" + (float)(shipController.maxResourceCount);

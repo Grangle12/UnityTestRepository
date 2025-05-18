@@ -19,5 +19,5 @@ MonoBehaviour:
   rareResourceAmt: 2
   rareResourceAmtVariance: 1
   sprite: {fileID: 7482667652216324306, guid: e86e2341148b6a744840d4a409549c1c, type: 3}
-  gameObject: {fileID: 2732925924372921158, guid: d78c1de73ca1e9545b08f6637b2ffb77, type: 3}
+  gameObject: {fileID: 2732925924372921158, guid: e1497be432394fb4ca1881423409a5b7, type: 3}
   color: {r: 0.17425251, g: 0, b: 1, a: 1}

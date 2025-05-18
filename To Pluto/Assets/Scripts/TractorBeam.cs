@@ -6,37 +6,123 @@ public class TractorBeam : MonoBehaviour
 
     bool currentlyTractoring;
     Collider tractorbeamCollider;
+    Collider2D tractorBeamCollider2D;
 
-    public int tractoringSpeed = 1;
+    public float tractoringSpeed = 1;
 
     Vector3 directionToShip;
 
     GameObject asteroidGO;
+    [SerializeField] GameObject dustCloud;
 
     private void Awake()
     {
         tractorbeamCollider = this.GetComponent<Collider>();
-        if(this.gameObject.tag != "Ship")
-        this.gameObject.GetComponent<Renderer>().material.color = Color.blue;
+        tractorBeamCollider2D = this.GetComponent<Collider2D>();
+        //if(this.gameObject.tag != "Ship")
+        //this.gameObject.GetComponent<Renderer>().material.color = Color.blue;
     }
 
     private void Update()
     {
         if(asteroidGO == null && currentlyTractoring)
         {
-            tractorbeamCollider.enabled = true;
+            if (tractorbeamCollider)
+            {
+                tractorbeamCollider.enabled = true;
+            }
+            else if (tractorBeamCollider2D)
+            {
+                tractorBeamCollider2D.enabled = true;
+            }
             currentlyTractoring = false;
-            if (this.gameObject.tag != "Ship")
-                this.gameObject.GetComponent<Renderer>().material.color = Color.blue;
+           // if (this.gameObject.tag != "Ship")
+               // this.gameObject.GetComponent<Renderer>().material.color = Color.blue;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        
+        if (this.gameObject.tag == "Ship")
+        {
+
+            if (other.gameObject.tag == "Asteroid")
+            {
+                GameObject newDust = Instantiate(dustCloud, other.transform.position, Quaternion.identity);
+                //Debug.Log("have we made " + newDust);
+
+                AsteroidResources resource = other.gameObject.GetComponent<AsteroidResources>();
+                float fuelAmount = resource.fuelAmt;
+
+                if (GameManager.instance.shipController.fuel + fuelAmount < GameManager.instance.shipController.maxFuel)
+                {
+                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.white);
+                    GameManager.instance.shipController.fuel += fuelAmount;
+                    //Debug.Log("Gained : " + fuelAmount + " Fuel");
+                    GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
+                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.blue);
+                    //Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
+                }
+                else
+                {
+                    GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
+                    GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                }
+                Destroy(other.gameObject);
+            }
+        }
+        else
+        {
+            //Debug.Log("Not A ship: " + this.gameObject);
+            if (other.gameObject.tag == "Asteroid" && !other.gameObject.GetComponent<AsteroidResources>().beingTractored)
+            {
+                asteroidGO = other.gameObject;
+                if (tractorbeamCollider)
+                {
+                    tractorbeamCollider.enabled = false;
+                    //Debug.Log("currently Tractoring: ");
+                    if (!currentlyTractoring)
+                    {
+                        currentlyTractoring = true;
+                        asteroidGO.GetComponent<AsteroidResources>().beingTractored = true;
+                        //asteroidGO.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+                        asteroidGO.GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 0, 0);
+                       // this.gameObject.GetComponent<Renderer>().material.color = Color.red;
+                    }
+                    asteroidGO.transform.LookAt(GameManager.instance.shipController.gameObject.transform);
+                    asteroidGO.GetComponent<Rigidbody>().linearVelocity = asteroidGO.transform.forward * tractoringSpeed;
+                }
+                
+                else if (tractorBeamCollider2D)
+                {
+                    tractorBeamCollider2D.enabled = false;
+
+                    if (!currentlyTractoring)
+                    {
+                        currentlyTractoring = true;
+                        asteroidGO.GetComponent<AsteroidResources>().beingTractored = true;
+                        //asteroidGO.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+                        asteroidGO.GetComponent<Rigidbody2D>().linearVelocity = new Vector3(0, 0, 0);
+                        //this.gameObject.GetComponent<Renderer2D>().material.color = Color.red;
+                    }
+                    // asteroidGO.transform.LookAt(GameManager.instance.shipController.gameObject.transform);
+                    asteroidGO.GetComponent<Rigidbody2D>().linearVelocity = Vector2.MoveTowards(asteroidGO.transform.position, GameManager.instance.shipController.gameObject.transform.parent.position, tractoringSpeed); // asteroidGO.transform.forward * tractoringSpeed;
+                }
+                
+
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (this.gameObject.tag == "Ship")
         {
+
             if (other.gameObject.tag == "Asteroid")
             {
+                Debug.Log("3D HIT!!!");
                 AsteroidResources resource = other.gameObject.GetComponent<AsteroidResources>();
                 float fuelAmount = resource.fuelAmt;
 

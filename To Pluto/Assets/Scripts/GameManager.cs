@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
             if (checkPointList[i].distanceFromSun > shipController.playerPosition)
             {
     
-                displayManager.distToNextChkPnt_Text.text = (checkPointList[i].distanceFromSun - shipController.playerPosition).ToString("f0")  + " Remaining distance to " + checkPointList[i].checkPointName;
+                displayManager.distToNextChkPnt_Text.text = (checkPointList[i].distanceFromSun - shipController.playerPosition).ToString("f0")  + " km to " + checkPointList[i].checkPointName;
                 
                 TimeToCheckpoint(displayManager.timeToNextChkPnt_Text,checkPointList[i]);
                 return;
@@ -135,4 +135,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ButtonTest()
+    {
+        Debug.Log("testing button");
+    }
 }

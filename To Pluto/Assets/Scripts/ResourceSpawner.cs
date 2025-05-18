@@ -55,7 +55,8 @@ public class ResourceSpawner : MonoBehaviour
             int resourceLevelChance = Random.Range(0, 100);
             if(GameManager.instance.shipController.detectorLevel == 0)
             {
-                newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                //newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                newGO = Instantiate(resourceList[0].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                 AssignAsteroidResource(newGO, resourceList[0]);
 
             }
@@ -120,9 +121,20 @@ public class ResourceSpawner : MonoBehaviour
                 AssignAsteroidResource(newGO, resourceList[0]);
             }
 
-            Rigidbody rb = newGO.GetComponent<Rigidbody>();
-            rb.AddForce(new Vector3(-randomForce, 0, 0));
-            rb.AddTorque(new Vector3(randomTorqueX, randomTorqueY, randomTorqueZ));
+            //If we do 3D
+            if (newGO.GetComponent<Rigidbody>())
+            {
+                Rigidbody rb = newGO.GetComponent<Rigidbody>();
+                rb.AddForce(new Vector3(-randomForce, 0, 0));
+                rb.AddTorque(new Vector3(randomTorqueX, randomTorqueY, randomTorqueZ));
+            }
+            //If we do 2D
+            else
+            {
+                Rigidbody2D rb = newGO.GetComponent<Rigidbody2D>();
+                rb.AddForce(new Vector3(-randomForce, 0, 0));
+                rb.AddTorque(randomTorqueX);
+            }
             currentTime = 0;
         }
     }
@@ -140,4 +152,8 @@ public class ResourceSpawner : MonoBehaviour
         Destroy(other.gameObject);
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Destroy(other.gameObject);
+    }
 }

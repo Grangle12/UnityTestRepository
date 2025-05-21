@@ -30,6 +30,7 @@ public class BuildEngine : MonoBehaviour
     {
         displayManager = GameManager.instance.displayManager;
         displayManager.engineCountText.text = GetCurrentEngineCount() + "/" + GameManager.instance.shipController.engineCountMax;
+        displayManager.UpdatePartLevel();
         displayManager.detectorLevelText.text = GameManager.instance.shipController.detectorLevel.ToString();
 
         
@@ -46,7 +47,7 @@ public class BuildEngine : MonoBehaviour
             if (partToBuild.GetType() == typeof(EnginePartSO))
             {
                 //NEED TO LOOK AT THIS *************************************************************************************
-                displayManager.iconFillImage.fillAmount = (timer / partToBuild.buildUpgradeTime[0]);
+                displayManager.iconFillImage.fillAmount = (timer / GameManager.instance.researchManager.GetPartUpgradeTime("Engine"));
             }
             else if (partToBuild.GetType() == typeof(ThrusterPartSO))
             {
@@ -87,7 +88,7 @@ public class BuildEngine : MonoBehaviour
     }
 
     //Get currentEngineCount
-    int GetCurrentEngineCount()
+    public int GetCurrentEngineCount()
     {
         int count = 0;
         for (int i = 0; i < GameManager.instance.shipController.enginePartSOList.Count; i++)
@@ -103,7 +104,7 @@ public class BuildEngine : MonoBehaviour
     public void AddEngine(EnginePartSO engine)
     {
         //NEED TO CHANGE THIS
-        if (engine.cost[0] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && GetCurrentEngineCount() < GameManager.instance.shipController.engineCountMax && !currentlyUpgrading && !currentlyUpgradingDetector)
+        if (GameManager.instance.researchManager.GetPartCost("Engine") <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && GetCurrentEngineCount() < GameManager.instance.shipController.engineCountMax && !currentlyUpgrading && !currentlyUpgradingDetector)
         {
             Debug.Log("we got resources");
             
@@ -159,9 +160,9 @@ public class BuildEngine : MonoBehaviour
     IEnumerator BuildCoroutine(EnginePartSO engine)
     {
         
-        Debug.Log("Building Engine and Thruster. Time to Completion: " + engine.buildUpgradeTime[0]);
-        GameManager.instance.shipController.resourceCount -= engine.cost[0];
-        yield return new WaitForSeconds(engine.buildUpgradeTime[0]);
+        Debug.Log("Building Engine and Thruster. Time to Completion: " + GameManager.instance.researchManager.GetPartUpgradeTime("Engine"));
+        GameManager.instance.shipController.resourceCount -= GameManager.instance.researchManager.GetPartCost("Engine");
+        yield return new WaitForSeconds(GameManager.instance.researchManager.GetPartUpgradeTime("Engine"));
 
         Debug.Log("Building Complete");
         
@@ -172,6 +173,7 @@ public class BuildEngine : MonoBehaviour
         displayManager.engineCountText.text = GetCurrentEngineCount() + "/" + GameManager.instance.shipController.engineCountMax;
         currentlyBuilding = false;
         displayManager.iconFillImage.fillAmount = 0;
+        displayManager.UpdatePartLevel();
     }
     IEnumerator BuildCoroutine()
     {
@@ -191,6 +193,7 @@ public class BuildEngine : MonoBehaviour
         displayManager.tractorBeamCountText.text = GameManager.instance.shipController.tractorBeamCount + "/" + GameManager.instance.shipController.tractorBeamCountMax;
         currentlyBuilding = false;
         displayManager.iconFillImage.fillAmount = 0;
+        displayManager.UpdatePartLevel();
     }
 
 
@@ -207,15 +210,15 @@ public class BuildEngine : MonoBehaviour
             if (currentEngine.cost[currentEngine.currentLevel + 1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
             {
 
-                        if (currentEngine.currentLevel < currentEngine.maxLevel)
-                        {
-                            currentlyUpgrading = true;
-                            StartCoroutine(UpgradeCoroutine(currentEngine));
-                            timer = 0;
-                            partToBuild = currentEngine;
-                            // displayManager.upgradeIconFillImage = fillImage;
-                            return;
-                        }
+                if (currentEngine.currentLevel < currentEngine.maxLevel)
+                {
+                    currentlyUpgrading = true;
+                    StartCoroutine(UpgradeCoroutine(currentEngine));
+                    timer = 0;
+                    partToBuild = currentEngine;
+                    // displayManager.upgradeIconFillImage = fillImage;
+                    return;
+                }
             }
         }
         else
@@ -261,7 +264,7 @@ public class BuildEngine : MonoBehaviour
 
 
         currentEngine.currentLevel++;
-          
+        
         
   
         currentlyUpgrading = false;
@@ -311,6 +314,7 @@ public class BuildEngine : MonoBehaviour
         displayManager.detectorLevelText.text = GameManager.instance.shipController.detectorLevel.ToString();
         displayManager.detectorFillImage.fillAmount = 0;
         currentlyUpgradingDetector = false;
+        displayManager.UpdatePartLevel();
     }
 
     public void UpgradeTractorBeam(PartSO tractorBeamSO)
@@ -322,4 +326,6 @@ public class BuildEngine : MonoBehaviour
   //  {
         //yield return new WaitForSeconds(tractorBeamSO.buildUpgradeTime[GameManager.instance.shipController.tractorPartSOReference]);
   //  }
+
+    
 }

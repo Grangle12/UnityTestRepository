@@ -6,8 +6,8 @@ public class AsteroidClicker : MonoBehaviour
 {
     private Camera mainCamera;
 
-    float fuelGain = 50;
-    int resourceGain = 10;
+    [SerializeField] float fuelGain = 5;
+    [SerializeField] int resourceGain = 10;
 
     
     public GameObject asteroidChunk;
@@ -28,6 +28,8 @@ public class AsteroidClicker : MonoBehaviour
     bool armMoving, armReturning;
     private Transform colliderTransform;
     private Transform asteroidTransform;
+
+    GameObject targetGO;
 
     private void Awake()
     {
@@ -51,34 +53,24 @@ public class AsteroidClicker : MonoBehaviour
             }
             else
             {
-                armEndPoint.position = Vector3.MoveTowards(armEndPoint.position, colliderTransform.position, armMoveSpeed);
-                Vector3 Direction = colliderTransform.position - armEndPoint.position;
-                Vector3 Direction2 = Vector3.ProjectOnPlane(transform.forward, Direction);
-                Quaternion rotation = Quaternion.LookRotation(Direction2, Direction);
-                armEndPoint.rotation = rotation;
-
-                List<Vector3> points = new List<Vector3>();
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                for (float i = 0; i <= 1; i += 1 / vertexCount)
-                {
-                    Vector3 t1 = Vector3.Lerp(ArmSpawnpoint.transform.position, ArmMidpoint.position, i);
-                    Vector3 t2 = Vector3.Lerp(ArmMidpoint.position, armEndPoint.position, i);
-                    Vector3 t = Vector3.Lerp(t1, t2, i);
-                    points.Add(t);
-
-
-                }
-                lineRender.positionCount = points.Count;
-                lineRender.SetPositions(points.ToArray());
+                ArmRender(ArmSpawnpoint, ArmMidpoint, armEndPoint, colliderTransform);
 
                 if (!armReturning)
                 {
                     if (armEndPoint.position == colliderTransform.position)
                     {
+                        
                         asteroidTransform = colliderTransform;
+                        if (colliderTransform.gameObject.tag == "ExploderAsteroid")
+                        {
+                           
+                            colliderTransform.gameObject.GetComponent<Asteroid_Exploder>().ExplodeWithResources();
+                        }
                         colliderTransform = GameManager.instance.shipController.gameObject.transform;
 
                         armReturning = true;
+
+                       
                     }
                 }
                 else
@@ -95,6 +87,34 @@ public class AsteroidClicker : MonoBehaviour
                 }
             }
         }
+        else if (armEndPoint.position != ArmMidpoint.position)
+        {
+            ArmRender(ArmSpawnpoint, ArmMidpoint, armEndPoint, ArmMidpoint);
+
+        }
+    }
+
+    void ArmRender(Transform startPoint, Transform midPoint, Transform endPoint, Transform targetTransform)
+    {
+        endPoint.position = Vector3.MoveTowards(endPoint.position, targetTransform.position, armMoveSpeed);
+        Vector3 Direction = targetTransform.position - endPoint.position;
+        Vector3 Direction2 = Vector3.ProjectOnPlane(transform.forward, Direction);
+        Quaternion rotation = Quaternion.LookRotation(Direction2, Direction);
+        endPoint.rotation = rotation;
+
+        List<Vector3> points = new List<Vector3>();
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        for (float i = 0; i <= 1; i += 1 / vertexCount)
+        {
+            Vector3 t1 = Vector3.Lerp(startPoint.position, midPoint.position, i);
+            Vector3 t2 = Vector3.Lerp(midPoint.position, endPoint.position, i);
+            Vector3 t = Vector3.Lerp(t1, t2, i);
+            points.Add(t);
+
+
+        }
+        lineRender.positionCount = points.Count;
+        lineRender.SetPositions(points.ToArray());
     }
 
     public void OnCLick(InputAction.CallbackContext context)
@@ -121,11 +141,13 @@ public class AsteroidClicker : MonoBehaviour
                     GameManager.instance.shipController.ShowFloatingText(fuelGain.ToString(), Color.white);
                     GameManager.instance.shipController.fuel += fuelGain;
                     GameManager.instance.shipController.resourceCount += resourceGain;
+                    
                 }
                 else
                 {
                     GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
-                    GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                    //GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                    Debug.Log("triggered1");
                 }
 
             }
@@ -136,28 +158,36 @@ public class AsteroidClicker : MonoBehaviour
             if (!armMoving)
             {
                 var rayHit = Physics2D.GetRayIntersection(ray);
-                if (rayHit.collider != null && rayHit.collider.gameObject.tag == "Asteroid")
+                if (rayHit.collider != null && (rayHit.collider.gameObject.tag == "Asteroid" || rayHit.collider.gameObject.tag == "ExploderAsteroid"))
                 {
                     colliderTransform = rayHit.collider.transform;
+                    targetGO = colliderTransform.gameObject;
                     armMoving = true;
 
 
 
                     // Destroy(rayHit.collider.gameObject);
                     GameManager.instance.asteroidClickCounter++;
+                    /*
                     Debug.Log("you have destroyed: " + GameManager.instance.asteroidClickCounter + "asteroids!");
                     GameManager.instance.shipController.speedKmps += 500;
+                    Debug.Log("fuel plus gain is: " + GameManager.instance.shipController.fuel + fuelGain);
+                    Debug.Log("MAx fuel is: " + GameManager.instance.shipController.maxFuel);
                     if (GameManager.instance.shipController.fuel + fuelGain < GameManager.instance.shipController.maxFuel)
                     {
                         GameManager.instance.shipController.ShowFloatingText(fuelGain.ToString(), Color.white);
                         GameManager.instance.shipController.fuel += fuelGain;
-                        GameManager.instance.shipController.resourceCount += resourceGain;
+                        
+                        
                     }
                     else
                     {
                         GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
-                        GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                        //GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                        
                     }
+                   // GameManager.instance.shipController.resourceCount += resourceGain;
+                    */
 
                 }
                 else if (rayHit.collider != null && rayHit.collider.gameObject.tag == "Sign")

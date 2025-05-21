@@ -11,6 +11,7 @@ public class PartSO : ScriptableObject
 
     //First number in array is the build/first time cost, subsequent numbers are costs/times associated with upgrading to that particular level. This array needs to be the same size as max Level
     public int[] cost;
+    public int[] buildCost;
     public float[] buildUpgradeTime;
 
     public Sprite icon;

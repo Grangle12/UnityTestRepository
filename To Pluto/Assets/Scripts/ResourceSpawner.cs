@@ -64,12 +64,12 @@ public class ResourceSpawner : MonoBehaviour
             {
                 if (resourceLevelChance < 90)
                 {
-                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[0]);
                 }
                 else
                 {
-                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[1]);
                 }
             }
@@ -77,17 +77,17 @@ public class ResourceSpawner : MonoBehaviour
             {
                 if (resourceLevelChance < 90)
                 {
-                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[0]);
                 }
                 else if (resourceLevelChance > 95)
                 {
-                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[1]);
                 }
                 else
                 {
-                    newGO = Instantiate(resourceList[2].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[2].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[2]);
                 }
             }
@@ -95,29 +95,29 @@ public class ResourceSpawner : MonoBehaviour
             {
                 if (resourceLevelChance < 85)
                 {
-                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[0].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[0]);
                 }
                 else if (resourceLevelChance > 85 && resourceLevelChance < 90)
                 {
-                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[1].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[1]);
                 }
                 else if (resourceLevelChance > 90 && resourceLevelChance < 95)
                 {
-                    newGO = Instantiate(resourceList[2].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[2].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[2]);
                 }
                 else
                 {
-                    newGO = Instantiate(resourceList[3].gameObject, randomPosition, Random.rotation);
+                    newGO = Instantiate(resourceList[3].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                     AssignAsteroidResource(newGO, resourceList[3]);
                 }
             }
             else
             {
                 Debug.Log("We are at a higher level than anticipated....");
-                newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
+                newGO = Instantiate(resourceList[0].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                 AssignAsteroidResource(newGO, resourceList[0]);
             }
 

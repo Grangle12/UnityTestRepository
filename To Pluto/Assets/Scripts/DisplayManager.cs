@@ -24,6 +24,9 @@ public class DisplayManager : MonoBehaviour
     public TMP_Text engineCountText;
     public TMP_Text tractorBeamCountText;
     public TMP_Text detectorLevelText;
+    public TMP_Text engineCostText, detectorCostText, tractorBeamCostText, researchCostText;
+
+    
 
     [Header("Images")]
     public Image fuelImage;
@@ -97,6 +100,14 @@ public class DisplayManager : MonoBehaviour
         gameObject.SetActive(!gameObject.activeSelf);
     }
 
+    //Updates the part level and cost of next build
+    public void UpdatePartLevel()
+    {
+        Debug.Log("we triggered the update of the part level it should be saying: " + GameManager.instance.researchManager.GetPartCost("Engine").ToString());
+        engineCountText.text = GameManager.instance.shipController.enginePartSOList.Count.ToString();
+        engineCostText.text = GameManager.instance.researchManager.GetPartCost("Engine").ToString();
 
+        //, detectorLevelText, tractorBeamLevelText, researchLevelText;
+    }
 
 }

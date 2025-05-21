@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: EnginePartSO
   m_EditorClassIdentifier: 
   partName: Engine
-  currentLevel: 1
+  currentLevel: 0
   maxLevel: 2
   cost: 0a0000000c0000000f000000140000001e000000
+  buildCost: 0a000000140000001e0000002d00000032000000
   buildUpgradeTime:
   - 10
   - 15

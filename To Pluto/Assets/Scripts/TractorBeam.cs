@@ -66,7 +66,7 @@ public class TractorBeam : MonoBehaviour
                 else
                 {
                     GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
-                    GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                    //GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
                 }
                 Destroy(other.gameObject);
             }
@@ -90,7 +90,8 @@ public class TractorBeam : MonoBehaviour
                        // this.gameObject.GetComponent<Renderer>().material.color = Color.red;
                     }
                     asteroidGO.transform.LookAt(GameManager.instance.shipController.gameObject.transform);
-                    asteroidGO.GetComponent<Rigidbody>().linearVelocity = asteroidGO.transform.forward * tractoringSpeed;
+                    Vector3.MoveTowards(asteroidGO.transform.position, GameManager.instance.shipController.gameObject.transform.position, tractoringSpeed);
+                    //asteroidGO.GetComponent<Rigidbody>().linearVelocity = asteroidGO.transform.forward * tractoringSpeed;
                 }
                 
                 else if (tractorBeamCollider2D)
@@ -106,7 +107,12 @@ public class TractorBeam : MonoBehaviour
                         //this.gameObject.GetComponent<Renderer2D>().material.color = Color.red;
                     }
                     // asteroidGO.transform.LookAt(GameManager.instance.shipController.gameObject.transform);
-                    asteroidGO.GetComponent<Rigidbody2D>().linearVelocity = Vector2.MoveTowards(asteroidGO.transform.position, GameManager.instance.shipController.gameObject.transform.parent.position, tractoringSpeed); // asteroidGO.transform.forward * tractoringSpeed;
+                    Vector3 newVect3 = Vector3.MoveTowards(asteroidGO.transform.position, this.transform.position, 500);
+                    Debug.Log("newvect is: " + newVect3);
+                    Vector2 vect2 = new Vector2(newVect3.y, newVect3.x);
+                    //asteroidGO.GetComponent<Rigidbody2D>().linearVelocity = Vector2.MoveTowards(asteroidGO.transform.position, this.transform.position, 500); // asteroidGO.transform.forward * tractoringSpeed;
+                    asteroidGO.GetComponent<Rigidbody2D>().linearVelocity = vect2; // asteroidGO.transform.forward * tractoringSpeed;
+                    Debug.Log("The shipcontroller parent is: " + GameManager.instance.shipController.gameObject.transform.parent);
                 }
                 
 
@@ -138,7 +144,7 @@ public class TractorBeam : MonoBehaviour
                 else
                 {
                     GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
-                    GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                   // GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
                 }
                 Destroy(other.gameObject);
             }

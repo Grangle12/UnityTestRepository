@@ -231,4 +231,33 @@ public class ResearchManager : MonoBehaviour
             }
         }
     }
+
+    public int GetPartCost(string partName)
+    {
+        for (int i = 0; i < listOfResearchableParts.Count; i++)
+        {
+            if (partName == listOfResearchableParts[i].partName)
+            {
+                return listOfResearchableParts[i].buildCost[GameManager.instance.shipController.enginePartSOList.Count];
+
+
+            }
+        }
+
+        return 0;
+    }
+    public float GetPartUpgradeTime(string partName)
+    {
+        for (int i = 0; i < listOfResearchableParts.Count; i++)
+        {
+            if (partName == listOfResearchableParts[i].partName)
+            {
+                return listOfResearchableParts[i].buildUpgradeTime[listOfResearchableParts[i].currentLevel];
+
+
+            }
+        }
+
+        return 0;
+    }
 }

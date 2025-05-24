@@ -13,9 +13,10 @@ public class AsteroidClicker : MonoBehaviour
     public GameObject asteroidChunk;
     [SerializeField] GameObject asteroidSign1, asteroidSign2;
 
-    public Transform ArmSpawnpoint;
-    public Transform ArmMidpoint;
+    public Transform armSpawnPoint;
+    public Transform armMidPoint;
     public Transform armEndPoint;
+    public Transform armRestingPoint;
     public float vertexCount;
     public float bendStrenth;
     public LineRenderer lineRender;
@@ -39,6 +40,7 @@ public class AsteroidClicker : MonoBehaviour
     private void Start()
     {
         ArmEndPointStartPos = armEndPoint.position;
+        ArmRender(armSpawnPoint, armMidPoint, armEndPoint, armRestingPoint);
     }
 
     private void Update()
@@ -53,7 +55,7 @@ public class AsteroidClicker : MonoBehaviour
             }
             else
             {
-                ArmRender(ArmSpawnpoint, ArmMidpoint, armEndPoint, colliderTransform);
+                ArmRender(armSpawnPoint, armMidPoint, armEndPoint, colliderTransform);
 
                 if (!armReturning)
                 {
@@ -87,9 +89,9 @@ public class AsteroidClicker : MonoBehaviour
                 }
             }
         }
-        else if (armEndPoint.position != ArmMidpoint.position)
+        else if (armEndPoint.position != armMidPoint.position)
         {
-            ArmRender(ArmSpawnpoint, ArmMidpoint, armEndPoint, ArmMidpoint);
+            ArmRender(armSpawnPoint, armMidPoint, armEndPoint, armRestingPoint);
 
         }
     }

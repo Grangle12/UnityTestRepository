@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 
 public class BuildEngine : MonoBehaviour
 {
     DisplayManager displayManager;
-    //[SerializeField] Image iconFillImage;
-    //[SerializeField] Image upgradeIconFillImage;
-    //[SerializeField] Image detectorFillImage;
 
-    
+    [SerializeField] List<GameObject> engineGraphicList = new List<GameObject>();
+    [SerializeField] List<GameObject> tractorBeamGraphicList = new List<GameObject>();
+    [SerializeField] GameObject detectorGraphic;
 
 
     float timer = 0;
@@ -169,6 +169,15 @@ public class BuildEngine : MonoBehaviour
         GameManager.instance.shipController.enginePartSOList.Add(Instantiate(engine));
         GameManager.instance.shipController.thrusterPartSOList.Add(Instantiate(GameManager.instance.shipController.thrusterPartSOReference));
 
+        //enable the graphics for the engines in list above
+        for(int i = 0; i < engineGraphicList.Count; i++)
+        {
+            if(!engineGraphicList[i].activeSelf)
+            {
+                engineGraphicList[i].SetActive(true);
+                break;
+            }
+        }
 
         displayManager.engineCountText.text = GetCurrentEngineCount() + "/" + GameManager.instance.shipController.engineCountMax;
         currentlyBuilding = false;
@@ -185,10 +194,18 @@ public class BuildEngine : MonoBehaviour
 
         Debug.Log("Building Complete");
 
-        GameManager.instance.shipController.tractorBeamGOList[GameManager.instance.shipController.tractorBeamCount].SetActive(true);
+
+        for (int i = 0; i < tractorBeamGraphicList.Count; i++)
+        {
+            if (!tractorBeamGraphicList[i].activeSelf)
+            {
+                tractorBeamGraphicList[i].SetActive(true);
+                break;
+            }
+        }
+       // GameManager.instance.shipController.tractorBeamGOList[GameManager.instance.shipController.tractorBeamCount].SetActive(true);
 
         GameManager.instance.shipController.tractorBeamCount++;
-                
 
         displayManager.tractorBeamCountText.text = GameManager.instance.shipController.tractorBeamCount + "/" + GameManager.instance.shipController.tractorBeamCountMax;
         currentlyBuilding = false;
@@ -288,11 +305,11 @@ public class BuildEngine : MonoBehaviour
         PartSO detector = GameManager.instance.shipController.detectorPartSOReference;
 
         Debug.Log("clicked ");
-        Debug.Log("clicked " + detector.cost[GameManager.instance.shipController.detectorLevel + 1]);
+        Debug.Log("clicked " + detector.cost[GameManager.instance.shipController.detectorLevel]);
         Debug.Log("clicked " + GameManager.instance.shipController.resourceCount);
         if (GameManager.instance.shipController.detectorLevel < detector.maxLevel)
         {
-            if (detector.cost[GameManager.instance.shipController.detectorLevel + 1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
+            if (detector.cost[GameManager.instance.shipController.detectorLevel] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
             {
                 Debug.Log("got passed the if statement");
                 partToBuild = detector;
@@ -311,6 +328,12 @@ public class BuildEngine : MonoBehaviour
         Debug.Log("Detector build finished!");
 
         GameManager.instance.shipController.detectorLevel++;
+        if(GameManager.instance.shipController.detectorLevel > 0)
+        {
+            detectorGraphic.SetActive(true);
+        }
+
+        Debug.Log("Detector level is: " + GameManager.instance.shipController.detectorLevel);
         displayManager.detectorLevelText.text = GameManager.instance.shipController.detectorLevel.ToString();
         displayManager.detectorFillImage.fillAmount = 0;
         currentlyUpgradingDetector = false;

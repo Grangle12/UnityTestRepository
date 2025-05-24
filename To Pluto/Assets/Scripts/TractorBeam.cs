@@ -48,7 +48,7 @@ public class TractorBeam : MonoBehaviour
 
             if (other.gameObject.tag == "Asteroid")
             {
-                GameObject newDust = Instantiate(dustCloud, other.transform.position, Quaternion.identity);
+                GameObject newDust = Instantiate(dustCloud, other.transform.position, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
                 //Debug.Log("have we made " + newDust);
 
                 AsteroidResources resource = other.gameObject.GetComponent<AsteroidResources>();
@@ -59,8 +59,7 @@ public class TractorBeam : MonoBehaviour
                     GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.white);
                     GameManager.instance.shipController.fuel += fuelAmount;
                     //Debug.Log("Gained : " + fuelAmount + " Fuel");
-                    GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
-                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.blue);
+
                     //Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
                 }
                 else
@@ -68,7 +67,16 @@ public class TractorBeam : MonoBehaviour
                     GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
                     //GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
                 }
-                Destroy(other.gameObject);
+                if (GameManager.instance.shipController.resourceCount + (int)(resource.rareResourceAmt) < GameManager.instance.shipController.maxResourceCount)
+                {
+                    GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
+                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.blue);
+                }
+                else
+                {
+                    GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                }
+                    Destroy(other.gameObject);
             }
         }
         else

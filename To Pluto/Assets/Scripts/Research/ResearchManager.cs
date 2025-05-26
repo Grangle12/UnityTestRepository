@@ -239,8 +239,6 @@ public class ResearchManager : MonoBehaviour
             if (partName == listOfResearchableParts[i].partName)
             {
                 return listOfResearchableParts[i].buildCost[GameManager.instance.shipController.enginePartSOList.Count];
-
-
             }
         }
 

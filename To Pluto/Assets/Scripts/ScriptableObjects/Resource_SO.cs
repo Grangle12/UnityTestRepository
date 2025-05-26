@@ -6,6 +6,8 @@ public class Resource_SO : ScriptableObject
     public string resourceName;
     public int level;
     
+    public float spawnRate;
+
     public float fuelAmt;
     public float fuelAmtVariance;
     

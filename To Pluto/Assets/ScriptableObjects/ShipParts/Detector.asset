@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   partName: Detector
   currentLevel: 0
-  maxLevel: 1
+  maxLevel: 4
   cost: 0a0000000c0000001000000018000000240000002d000000
+  buildCost: 
   buildUpgradeTime:
   - 5
   - 10

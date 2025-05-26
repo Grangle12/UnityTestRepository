@@ -25,6 +25,7 @@ public class DisplayManager : MonoBehaviour
     public TMP_Text tractorBeamCountText;
     public TMP_Text detectorLevelText;
     public TMP_Text engineCostText, detectorCostText, tractorBeamCostText, researchCostText;
+    public TMP_Text engineUpgradeCostText, engineUpgradeLevel;
 
     
 
@@ -51,6 +52,9 @@ public class DisplayManager : MonoBehaviour
     [SerializeField] GameObject researchMenu;
 
 
+    [Header("Prefabs")]
+    public GameObject floatingTextGO, floatingTextSpawnLocation;
+
     // [Header("Menus")]
     // public GameObject upgradeMenu;
 
@@ -72,7 +76,7 @@ public class DisplayManager : MonoBehaviour
         playerSpeed_Text.text = shipController.speedKmps.ToString("f0") + " km/hr";
         playerPos_Text.text = (shipController.playerPosition).ToString("f0") + " km from the Sun";
 
-        distTraveled_Text.text = "Distance Traveled: " + (shipController.playerPosition - shipController.playerStartPosition).ToString("f0") + " km";
+        distTraveled_Text.text = "Space Traveled: " + (shipController.playerPosition - shipController.playerStartPosition).ToString("f0") + " km";
 
         fuelLevel_Text.text = shipController.fuel + "/" + shipController.maxFuel;
         resourceCount_Text.text = (float)(shipController.resourceCount) + "/" + (float)(shipController.maxResourceCount);
@@ -109,5 +113,13 @@ public class DisplayManager : MonoBehaviour
 
         //, detectorLevelText, tractorBeamLevelText, researchLevelText;
     }
+    public void CreateFloatingText(Transform parentTransform, string floatingTextString)
+    {
+        Vector3 offset = new Vector3(0, 3, 0);
+        //Quaternion rot = 
+        GameObject newGO = Instantiate(floatingTextGO, floatingTextSpawnLocation.transform.position, floatingTextSpawnLocation.transform.rotation,parentTransform);
+        Debug.Log(newGO + " floatingTextString");
+        newGO.GetComponentInChildren<TextMesh>().text = floatingTextString;
 
+    }
 }

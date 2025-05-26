@@ -7,14 +7,20 @@ public class ResourceSpawner : MonoBehaviour
     public float spawnTime = 1;
 
     float currentTime = 0;
+    List<float> resourceTimers = new List<float>();
 
     public bool spawner;
     public bool despawner;
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        resourceTimers.Clear();
+        for(int i =0; i < resourceList.Count;i++)
+        {
+            resourceTimers.Add(0f);
+        }
     }
 
     // Update is called once per frame
@@ -23,6 +29,12 @@ public class ResourceSpawner : MonoBehaviour
         if (spawner)
         {
             currentTime += Time.deltaTime;
+            for(int i = 0; i < resourceTimers.Count; i++)
+            {
+                resourceTimers[i] += Time.deltaTime;
+            }
+
+
             SpawnResource();
         }
         else if (despawner)
@@ -45,14 +57,46 @@ public class ResourceSpawner : MonoBehaviour
         float randomTorqueY = Random.Range(-10, 10);
         float randomTorqueZ = Random.Range(-10, 10);
 
+        
 
         Vector3 randomPosition = this.transform.position + new Vector3(-2, randomDistribution, 0);
 
+        GameObject newGO;
+
+        for (int i = 0; i < resourceList.Count; i++)
+        {
+            if (resourceTimers.Count > i)
+            {
+                randomTimeDistribution = Random.Range(resourceTimers[i], 5);
+            }
+            else
+            {
+                Debug.LogError("Not enough timers for resources");
+            }
+
+            if (resourceTimers[i] > resourceList[i].spawnRate)// + randomTimeDistribution)
+            {
+                if (resourceList[i].level <= GameManager.instance.shipController.detectorLevel)
+                {
+                    newGO = Instantiate(resourceList[i].gameObject, randomPosition, Quaternion.Euler(0.0f, 0.0f, Random.Range(0.0f, 360.0f)));
+                    AssignAsteroidResource(newGO, resourceList[i]);
+                    Rigidbody2D rb = newGO.GetComponent<Rigidbody2D>();
+                    rb.AddForce(new Vector3(-randomForce, 0, 0));
+                    rb.AddTorque(randomTorqueX);
+                }
+                resourceTimers[i] = 0f;
+
+            }
+        }
+
+        /*
         if (currentTime > randomTimeDistribution) 
         {
-            GameObject newGO;
+            
 
             int resourceLevelChance = Random.Range(0, 100);
+
+
             if(GameManager.instance.shipController.detectorLevel == 0)
             {
                 //newGO = Instantiate(resourceList[0].gameObject, randomPosition, Random.rotation);
@@ -137,6 +181,7 @@ public class ResourceSpawner : MonoBehaviour
             }
             currentTime = 0;
         }
+        */
     }
 
     private void AssignAsteroidResource(GameObject newGO, Resource_SO resource)

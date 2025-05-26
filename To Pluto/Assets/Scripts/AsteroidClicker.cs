@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class AsteroidClicker : MonoBehaviour
@@ -32,6 +33,11 @@ public class AsteroidClicker : MonoBehaviour
 
     GameObject targetGO;
 
+    [SerializeField] GameObject armGameObjectReference;
+    [SerializeField] int armCount;
+    List<GameObject> armGameObjects = new List<GameObject>();
+
+    [SerializeField] bool noClickNeeded;
     private void Awake()
     {
         mainCamera = Camera.main;
@@ -41,10 +47,34 @@ public class AsteroidClicker : MonoBehaviour
     {
         ArmEndPointStartPos = armEndPoint.position;
         ArmRender(armSpawnPoint, armMidPoint, armEndPoint, armRestingPoint);
+
+        while (armGameObjects.Count < armCount && armGameObjectReference != null)
+        {
+            Vector3 tempVector3 = new Vector3 (0,Random.Range(-.5f, .5f), 0);
+            GameObject newGO = Instantiate(armGameObjectReference);//, armGameObjectReference.transform.position, Quaternion.identity, GameManager.instance.shipController.transform));
+            armGameObjects.Add(newGO);
+            newGO.transform.position += tempVector3;
+            newGO.transform.Find("LineRenderMid").position += tempVector3;
+            newGO.transform.Find("LineRenderEnd").position += tempVector3;
+        }
+
+        for (int i = 0; i < armGameObjects.Count; i++)
+        {
+
+            ArmRenderer armInstance = armGameObjects[i].GetComponent<ArmRenderer>();
+
+            if (armInstance.colliderTransform == null)
+            {
+                armInstance.colliderTransform = GameManager.instance.shipController.gameObject.transform;
+
+            }
+        }
     }
 
     private void Update()
     {
+        NoClickJustHover();
+        /*
         if(armMoving)
         {
             if (colliderTransform == null)
@@ -94,6 +124,74 @@ public class AsteroidClicker : MonoBehaviour
             ArmRender(armSpawnPoint, armMidPoint, armEndPoint, armRestingPoint);
 
         }
+        */
+        for(int i = 0; i < armGameObjects.Count; i++)
+        {
+            
+            ArmRenderer armInstance = armGameObjects[i].GetComponent<ArmRenderer>();
+            
+            if (armInstance.colliderTransform == null)
+            {
+                armInstance.colliderTransform = GameManager.instance.shipController.gameObject.transform;
+
+                armInstance.armReturning = true;
+            }
+
+            if (!armInstance.armMoving)
+            {
+              //  if (!armInstance.armStaticDrawn)
+                {
+                    armInstance.ArmRender(armInstance.armSpawnPoint, armInstance.armMidPoint, armInstance.armEndPoint, armInstance.armRestingPoint);
+                    armInstance.HandLookAt(armInstance.armRestingLookAtPoint, armInstance.armEndPoint);
+                    //Debug.Log("I, " + armGameObjects[i] + i + ", am looking at " + armInstance.armRestingLookAtPoint);
+                    //armInstance.armEndPoint.
+                 //   armInstance.armStaticDrawn = true;
+                }
+            }
+            else if (armInstance.armMoving)
+            {
+                armInstance.armStaticDrawn = false;
+
+                armInstance.ArmRender(armInstance.armSpawnPoint, armInstance.armMidPoint, armInstance.armEndPoint, armInstance.colliderTransform);
+
+                if (!armInstance.armReturning)
+                {
+                    if (armInstance.armEndPoint.position == armInstance.colliderTransform.position)
+                    {
+
+                        armInstance.asteroidTransform = armInstance.colliderTransform;
+
+                        if (armInstance.colliderTransform.gameObject.tag == "ExploderAsteroid")
+                        {
+
+                            armInstance.colliderTransform.gameObject.GetComponent<Asteroid_Exploder>().ExplodeWithResources();
+                        }
+                        armInstance.colliderTransform = GameManager.instance.shipController.gameObject.transform;
+
+                        armInstance.armReturning = true;
+                        Debug.Log("setting return to true");
+
+                    }
+                }
+                else
+                {
+                    if (armInstance.asteroidTransform != null)
+                    {
+                        armInstance.asteroidTransform.position = armInstance.armEndPoint.position;
+                    }
+                    if (armInstance.armEndPoint.position == armInstance.colliderTransform.position)
+                    {
+                        armInstance.armReturning = false;
+                        armInstance.armMoving = false;
+                    }
+                }
+            }
+            else if (armInstance.armEndPoint.position != armInstance.armMidPoint.position)
+            {
+                ArmRender(armInstance.armSpawnPoint, armInstance.armMidPoint, armInstance.armEndPoint, armInstance.armRestingPoint);
+
+            }
+        }
     }
 
     void ArmRender(Transform startPoint, Transform midPoint, Transform endPoint, Transform targetTransform)
@@ -119,6 +217,17 @@ public class AsteroidClicker : MonoBehaviour
         lineRender.SetPositions(points.ToArray());
     }
 
+    void CheckIfArmAvailableForAction()
+    {
+        for(int i = 0; i < armGameObjects.Count; i++)
+        {
+            if(!armGameObjects[i].GetComponent<ArmRenderer>().armMoving && !armGameObjects[i].GetComponent<ArmRenderer>().armReturning)
+            {
+                armGameObjects[i].GetComponent<ArmRenderer>().colliderTransform = colliderTransform;
+            }
+        }
+    }
+
     public void OnCLick(InputAction.CallbackContext context)
     {
         if (!context.started)
@@ -132,15 +241,16 @@ public class AsteroidClicker : MonoBehaviour
         //3D Clicking
         if (Physics.Raycast(ray, out hit))
         {
+            /*
             if (hit.collider != null && hit.collider.gameObject.tag == "Asteroid")
             {
                 Destroy(hit.collider.gameObject);
                 GameManager.instance.asteroidClickCounter++;
                 Debug.Log("you have destroyed: " + GameManager.instance.asteroidClickCounter + "asteroids!");
-                GameManager.instance.shipController.speedKmps += 500;
+                //GameManager.instance.shipController.speedKmps += 500;
                 if (GameManager.instance.shipController.fuel + fuelGain < GameManager.instance.shipController.maxFuel)
                 {
-                    GameManager.instance.shipController.ShowFloatingText(fuelGain.ToString(), Color.white);
+                    GameManager.instance.shipController.ShowFloatingText(fuelGain.ToString(), Color.white, "Energy");
                     GameManager.instance.shipController.fuel += fuelGain;
                     GameManager.instance.shipController.resourceCount += resourceGain;
                     
@@ -153,45 +263,66 @@ public class AsteroidClicker : MonoBehaviour
                 }
 
             }
+            */
         }
         //2D Clicking
         else 
         {
+            for (int i = 0; i < armGameObjects.Count; i++)
+            {
+                ArmRenderer armInstance = armGameObjects[i].GetComponent<ArmRenderer>();
+                if (!armInstance.armMoving)
+                {
+                    var rayHit = Physics2D.GetRayIntersection(ray);
+                    if (rayHit.collider != null && (rayHit.collider.gameObject.tag == "Asteroid" || rayHit.collider.gameObject.tag == "ExploderAsteroid"))
+                    {
+                        if (!rayHit.collider.GetComponent<AsteroidResources>().beingTractored)
+                        {
+                            Debug.Log("it looks like arm: # " + i + " is available for use");
+                            armInstance.colliderTransform = rayHit.collider.transform;
+                            armInstance.targetGO = armInstance.colliderTransform.gameObject;
+                            armInstance.armMoving = true;
+
+                            GameManager.instance.asteroidClickCounter++;
+                            rayHit.collider.GetComponent<AsteroidResources>().beingTractored = true;
+                            break;
+                        }
+                    }
+
+                    // SIGN Asteroid collapse
+                    else if (rayHit.collider != null && rayHit.collider.gameObject.tag == "Sign")
+                    {
+                        Debug.Log("we hit the sign");
+                        if (asteroidChunk != null)
+                        {
+                            Instantiate(asteroidChunk, new Vector3(rayHit.collider.transform.position.x, rayHit.collider.transform.position.y, rayHit.collider.transform.position.z - .05f), Quaternion.identity);
+                            asteroidSign1.SetActive(false);
+                            asteroidSign2.SetActive(true);
+                        }
+                        else
+                        {
+                            Debug.Log("returning null" + rayHit.collider.gameObject);
+                        }
+                    }
+                }
+            }
+            /*
             if (!armMoving)
             {
                 var rayHit = Physics2D.GetRayIntersection(ray);
                 if (rayHit.collider != null && (rayHit.collider.gameObject.tag == "Asteroid" || rayHit.collider.gameObject.tag == "ExploderAsteroid"))
                 {
+
                     colliderTransform = rayHit.collider.transform;
                     targetGO = colliderTransform.gameObject;
                     armMoving = true;
 
-
-
-                    // Destroy(rayHit.collider.gameObject);
                     GameManager.instance.asteroidClickCounter++;
-                    /*
-                    Debug.Log("you have destroyed: " + GameManager.instance.asteroidClickCounter + "asteroids!");
-                    GameManager.instance.shipController.speedKmps += 500;
-                    Debug.Log("fuel plus gain is: " + GameManager.instance.shipController.fuel + fuelGain);
-                    Debug.Log("MAx fuel is: " + GameManager.instance.shipController.maxFuel);
-                    if (GameManager.instance.shipController.fuel + fuelGain < GameManager.instance.shipController.maxFuel)
-                    {
-                        GameManager.instance.shipController.ShowFloatingText(fuelGain.ToString(), Color.white);
-                        GameManager.instance.shipController.fuel += fuelGain;
-                        
-                        
-                    }
-                    else
-                    {
-                        GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
-                        //GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
-                        
-                    }
-                   // GameManager.instance.shipController.resourceCount += resourceGain;
-                    */
+                   
 
                 }
+                
+                // SIGN Asteroid collapse
                 else if (rayHit.collider != null && rayHit.collider.gameObject.tag == "Sign")
                 {
                     Debug.Log("we hit the sign");
@@ -207,8 +338,48 @@ public class AsteroidClicker : MonoBehaviour
                     }
                 }
             }
+            */
         }
     }
+    
+    public void NoClickJustHover()
+    {
 
+        //RaycastHit hit;
+       
+        
+        if (noClickNeeded)
+        {
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            var rayHit = Physics2D.GetRayIntersection(ray);
 
+          //  Debug.Log(rayHit.collider);
+            for (int i = 0; i < armGameObjects.Count; i++)
+            {
+                    ArmRenderer armInstance = armGameObjects[i].GetComponent<ArmRenderer>();
+                    if (!armInstance.armMoving)
+                    {
+                        
+                        if (rayHit.collider != null && (rayHit.collider.gameObject.tag == "Asteroid" || rayHit.collider.gameObject.tag == "ExploderAsteroid"))
+                        {
+                            if (!rayHit.collider.GetComponent<AsteroidResources>().beingTractored)
+                            {
+                                //Debug.Log("it looks like arm: # " + i + " is available for use");
+                                armInstance.colliderTransform = rayHit.collider.transform;
+                                armInstance.targetGO = armInstance.colliderTransform.gameObject;
+                                armInstance.armMoving = true;
+
+                               // GameManager.instance.asteroidClickCounter++;
+                                rayHit.collider.GetComponent<AsteroidResources>().beingTractored = true;
+                                break;
+                            }
+                        }
+
+                       
+                    }
+              }
+        }
+        
+    }   
+   
 }

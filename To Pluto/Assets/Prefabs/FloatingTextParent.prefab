@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.885, y: 1.02, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 46.505444, y: 46.505444, z: 46.50545}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3592225185560830666}
@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 7426285478385494960}
   - component: {fileID: 278051211800912473}
   - component: {fileID: 66194609795175075}
+  - component: {fileID: 3997111199181135117}
   m_Layer: 0
   m_Name: FloatingText
   m_TagString: Untagged
@@ -74,7 +75,7 @@ RectTransform:
   m_GameObject: {fileID: 8142943975395849374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1503, y: 1.1503, z: 1.1503}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 731717742971279575}
@@ -137,7 +138,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8142943975395849374}
-  m_Text: 100
+  m_Text: 9878
   m_OffsetZ: 0
   m_CharacterSize: 0.1
   m_LineSpacing: 1
@@ -150,7 +151,7 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278234855
 --- !u!95 &66194609795175075
 Animator:
   serializedVersion: 7
@@ -173,3 +174,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3997111199181135117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8142943975395849374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a69c80f688ba3e4d8af2521731eaa61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

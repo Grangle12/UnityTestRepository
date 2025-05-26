@@ -8,7 +8,15 @@ public class BuildEngine : MonoBehaviour
 {
     DisplayManager displayManager;
 
+    //Should be Obsolete soon
     [SerializeField] List<GameObject> engineGraphicList = new List<GameObject>();
+
+    //Replacement
+    [SerializeField] GameObject engineGraphic, engineSpawnArea;
+
+    
+    
+    
     [SerializeField] List<GameObject> tractorBeamGraphicList = new List<GameObject>();
     [SerializeField] GameObject detectorGraphic;
 
@@ -109,7 +117,8 @@ public class BuildEngine : MonoBehaviour
             Debug.Log("we got resources");
             
             currentlyBuilding = true;
-            StartCoroutine(BuildCoroutine(engine));
+            //StartCoroutine(BuildEngineCoroutine(engine));
+            StartCoroutine(BuildEngineCoroutine(GameManager.instance.shipController.enginePartSOReference));
             timer = 0;
             partToBuild = engine;
             displayManager.iconFillImage = displayManager.BuildEngineFillImage;
@@ -157,7 +166,7 @@ public class BuildEngine : MonoBehaviour
     }
 
     //This build creates an Engine Fuel Efficiency as well as a thruster
-    IEnumerator BuildCoroutine(EnginePartSO engine)
+    IEnumerator BuildEngineCoroutine(EnginePartSO engine)
     {
         
         Debug.Log("Building Engine and Thruster. Time to Completion: " + GameManager.instance.researchManager.GetPartUpgradeTime("Engine"));
@@ -169,17 +178,14 @@ public class BuildEngine : MonoBehaviour
         GameManager.instance.shipController.enginePartSOList.Add(Instantiate(engine));
         GameManager.instance.shipController.thrusterPartSOList.Add(Instantiate(GameManager.instance.shipController.thrusterPartSOReference));
 
-        //enable the graphics for the engines in list above
-        for(int i = 0; i < engineGraphicList.Count; i++)
-        {
-            if(!engineGraphicList[i].activeSelf)
-            {
-                engineGraphicList[i].SetActive(true);
-                break;
-            }
-        }
+        //Randomly offset the engine
+        float randY = Random.Range(-0.5f, .5f);
+        Debug.Log("Random number has stated: " + randY);
+        
 
-        displayManager.engineCountText.text = GetCurrentEngineCount() + "/" + GameManager.instance.shipController.engineCountMax;
+        Instantiate(engineGraphic, (engineSpawnArea.transform.position + new Vector3(0,randY,0)), Quaternion.identity, this.transform);
+
+        displayManager.engineCountText.text = GetCurrentEngineCount().ToString();
         currentlyBuilding = false;
         displayManager.iconFillImage.fillAmount = 0;
         displayManager.UpdatePartLevel();
@@ -227,14 +233,28 @@ public class BuildEngine : MonoBehaviour
             if (currentEngine.cost[currentEngine.currentLevel + 1] <= GameManager.instance.shipController.resourceCount && !currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
             {
 
-                if (currentEngine.currentLevel < currentEngine.maxLevel)
+                //Just Added additional code here to just do one fuel efficiency upgrade for all engines isntead of a separate upgrade for each engine
+                if (GameManager.instance.shipController.enginePartSOReference.currentLevel < GameManager.instance.shipController.enginePartSOReference.maxLevel)
                 {
-                    currentlyUpgrading = true;
-                    StartCoroutine(UpgradeCoroutine(currentEngine));
-                    timer = 0;
-                    partToBuild = currentEngine;
-                    // displayManager.upgradeIconFillImage = fillImage;
-                    return;
+                    GameManager.instance.shipController.enginePartSOReference.currentLevel++;
+                }
+
+                for (int i = 0; i < GameManager.instance.shipController.enginePartSOList.Count; i++)
+                {
+
+                    //if (currentEngine.currentLevel < currentEngine.maxLevel)
+                    if (GameManager.instance.shipController.enginePartSOList[i].currentLevel < GameManager.instance.shipController.enginePartSOList[i].maxLevel)
+
+                    {
+
+
+                        currentlyUpgrading = true;
+                        StartCoroutine(UpgradeCoroutine(GameManager.instance.shipController.enginePartSOList[i]));
+                        timer = 0;
+                        partToBuild = currentEngine;
+                        // displayManager.upgradeIconFillImage = fillImage;
+                        //return;
+                    }
                 }
             }
         }
@@ -275,9 +295,9 @@ public class BuildEngine : MonoBehaviour
 
     IEnumerator UpgradeCoroutine(PartSO currentEngine)
     {
-        GameManager.instance.shipController.resourceCount -= currentEngine.cost[currentEngine.currentLevel+1];
+        GameManager.instance.shipController.resourceCount -= currentEngine.cost[currentEngine.currentLevel];
 
-        yield return new WaitForSeconds(currentEngine.buildUpgradeTime[currentEngine.currentLevel + 1]);
+        yield return new WaitForSeconds(currentEngine.buildUpgradeTime[currentEngine.currentLevel]);
 
 
         currentEngine.currentLevel++;
@@ -290,6 +310,8 @@ public class BuildEngine : MonoBehaviour
             Debug.Log("type is engine");
             displayManager.engineResearchFillImages[engineUpgradeNumber].fillAmount = 0;
             displayManager.engineUpgradeTexts[engineUpgradeNumber].text = "LEVEL " + currentEngine.currentLevel;
+            displayManager.engineUpgradeCostText.text = currentEngine.cost[currentEngine.currentLevel].ToString();
+            displayManager.engineUpgradeLevel.text = currentEngine.currentLevel.ToString();
         }
         else if (currentEngine.GetType() == typeof(ThrusterPartSO))
         {

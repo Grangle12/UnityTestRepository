@@ -54,25 +54,28 @@ public class TractorBeam : MonoBehaviour
                 AsteroidResources resource = other.gameObject.GetComponent<AsteroidResources>();
                 float fuelAmount = resource.fuelAmt;
 
-                if (GameManager.instance.shipController.fuel + fuelAmount < GameManager.instance.shipController.maxFuel)
+                if (GameManager.instance.shipController.fuel + fuelAmount < GameManager.instance.shipController.maxFuel && fuelAmount > 0)
                 {
-                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.white);
+                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.white, "Energy");
                     GameManager.instance.shipController.fuel += fuelAmount;
-                    //Debug.Log("Gained : " + fuelAmount + " Fuel");
+                    Debug.Log("Gained : " + fuelAmount + " Fuel");
 
-                    //Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
+                    
                 }
-                else
+                else if (fuelAmount > 0)
                 {
                     GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
+                    
                     //GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
                 }
-                if (GameManager.instance.shipController.resourceCount + (int)(resource.rareResourceAmt) < GameManager.instance.shipController.maxResourceCount)
+                if (GameManager.instance.shipController.resourceCount + (int)(resource.rareResourceAmt) < GameManager.instance.shipController.maxResourceCount && resource.rareResourceAmt > 0)
                 {
                     GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
-                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.blue);
+                    GameManager.instance.shipController.ShowFloatingText(resource.rareResourceAmt.ToString(), Color.blue, "Gem1");
+                    Debug.Log("saying were blue here");
+                    Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
                 }
-                else
+                else if (resource.rareResourceAmt > 0)
                 {
                     GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
                 }
@@ -127,7 +130,7 @@ public class TractorBeam : MonoBehaviour
             }
         }
     }
-
+    /*
     private void OnTriggerEnter(Collider other)
     {
 
@@ -140,20 +143,32 @@ public class TractorBeam : MonoBehaviour
                 AsteroidResources resource = other.gameObject.GetComponent<AsteroidResources>();
                 float fuelAmount = resource.fuelAmt;
 
-                if (GameManager.instance.shipController.fuel + fuelAmount < GameManager.instance.shipController.maxFuel)
+                if (GameManager.instance.shipController.fuel + fuelAmount < GameManager.instance.shipController.maxFuel && fuelAmount > 0)
                 {
-                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.white);
+                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.white, "Energy");
                     GameManager.instance.shipController.fuel += fuelAmount;
-                    //Debug.Log("Gained : " + fuelAmount + " Fuel");
-                    GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
-                    GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.blue);
-                    //Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
+                    Debug.Log("Gained : " + fuelAmount + " Fuel");
+                    //GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
+                    //GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.blue);
+                    //
                 }
                 else
                 {
                     GameManager.instance.shipController.fuel = GameManager.instance.shipController.maxFuel;
-                   // GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                    // GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
                 }
+                if (GameManager.instance.shipController.resourceCount + (int)(resource.rareResourceAmt) < GameManager.instance.shipController.maxResourceCount && (int)(resource.rareResourceAmt) > 0)
+                {
+                    GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
+                    GameManager.instance.shipController.ShowFloatingText(((int)(resource.rareResourceAmt)).ToString(), Color.blue, "Gem1");
+                    Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
+                }
+                else
+                {
+                    GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                    // GameManager.instance.shipController.resourceCount = GameManager.instance.shipController.maxResourceCount;
+                }
+
                 Destroy(other.gameObject);
             }
         }
@@ -180,6 +195,7 @@ public class TractorBeam : MonoBehaviour
             }
         }
     }
+    */
 
 
 }

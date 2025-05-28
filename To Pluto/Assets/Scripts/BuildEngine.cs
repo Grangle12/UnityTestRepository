@@ -165,6 +165,11 @@ public class BuildEngine : MonoBehaviour
         }
     }
 
+    public void BuildArm()
+    {
+        StartCoroutine(BuildArmCoroutine());
+    }
+
     //This build creates an Engine Fuel Efficiency as well as a thruster
     IEnumerator BuildEngineCoroutine(EnginePartSO engine)
     {
@@ -218,7 +223,22 @@ public class BuildEngine : MonoBehaviour
         displayManager.iconFillImage.fillAmount = 0;
         displayManager.UpdatePartLevel();
     }
+    IEnumerator BuildArmCoroutine()
+    {
+        PartSO armBuild = GameManager.instance.shipController.armPartSOReference;
+        Debug.Log("Building Tractor Beam: " + armBuild.buildUpgradeTime[GameManager.instance.GetComponent<AsteroidClicker>().armCount]);
+        GameManager.instance.shipController.resourceCount -= GameManager.instance.shipController.armPartSOReference.cost[GameManager.instance.GetComponent<AsteroidClicker>().armCount];
 
+        yield return new WaitForSeconds(armBuild.buildUpgradeTime[GameManager.instance.GetComponent<AsteroidClicker>().armCount]);
+
+        Debug.Log("Arm Building Complete");
+
+        GameManager.instance.GetComponent<AsteroidClicker>().AddArm();
+
+        currentlyBuilding = false;
+        displayManager.iconFillImage.fillAmount = 0;
+        displayManager.UpdatePartLevel();
+    }
 
 
 

@@ -35,6 +35,7 @@ public class SpaceShipController : MonoBehaviour
     public ThrusterPartSO thrusterPartSOReference;
     public PartSO tractorPartSOReference;
     public PartSO detectorPartSOReference;
+    public PartSO armPartSOReference;
 
 
     public List<EnginePartSO> enginePartSOList = new List<EnginePartSO>();

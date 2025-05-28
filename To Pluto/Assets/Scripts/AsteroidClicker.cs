@@ -34,8 +34,8 @@ public class AsteroidClicker : MonoBehaviour
     GameObject targetGO;
 
     [SerializeField] GameObject armGameObjectReference;
-    [SerializeField] int armCount;
-    List<GameObject> armGameObjects = new List<GameObject>();
+    public int armCount;
+    public List<GameObject> armGameObjects = new List<GameObject>();
 
     [SerializeField] bool noClickNeeded;
     private void Awake()
@@ -48,27 +48,7 @@ public class AsteroidClicker : MonoBehaviour
         ArmEndPointStartPos = armEndPoint.position;
         ArmRender(armSpawnPoint, armMidPoint, armEndPoint, armRestingPoint);
 
-        while (armGameObjects.Count < armCount && armGameObjectReference != null)
-        {
-            Vector3 tempVector3 = new Vector3 (0,Random.Range(-.5f, .5f), 0);
-            GameObject newGO = Instantiate(armGameObjectReference);//, armGameObjectReference.transform.position, Quaternion.identity, GameManager.instance.shipController.transform));
-            armGameObjects.Add(newGO);
-            newGO.transform.position += tempVector3;
-            newGO.transform.Find("LineRenderMid").position += tempVector3;
-            newGO.transform.Find("LineRenderEnd").position += tempVector3;
-        }
-
-        for (int i = 0; i < armGameObjects.Count; i++)
-        {
-
-            ArmRenderer armInstance = armGameObjects[i].GetComponent<ArmRenderer>();
-
-            if (armInstance.colliderTransform == null)
-            {
-                armInstance.colliderTransform = GameManager.instance.shipController.gameObject.transform;
-
-            }
-        }
+        InitiateMapArms();
     }
 
     private void Update()
@@ -192,6 +172,45 @@ public class AsteroidClicker : MonoBehaviour
 
             }
         }
+    }
+
+    void InitiateMapArms()
+    {
+
+        while (armGameObjects.Count < armCount && armGameObjectReference != null)
+        {
+            Vector3 tempVector3 = new Vector3(0, Random.Range(-.5f, .5f), 0);
+            GameObject newGO = Instantiate(armGameObjectReference);//, armGameObjectReference.transform.position, Quaternion.identity, GameManager.instance.shipController.transform));
+            armGameObjects.Add(newGO);
+            newGO.transform.position += tempVector3;
+            newGO.transform.Find("LineRenderMid").position += tempVector3;
+            newGO.transform.Find("LineRenderEnd").position += tempVector3;
+        }
+
+        for (int i = 0; i < armGameObjects.Count; i++)
+        {
+
+            ArmRenderer armInstance = armGameObjects[i].GetComponent<ArmRenderer>();
+
+            if (armInstance.colliderTransform == null)
+            {
+                armInstance.colliderTransform = GameManager.instance.shipController.gameObject.transform;
+
+            }
+        }
+    }
+
+    public void AddArm()
+    {
+        armCount++;
+        Vector3 tempVector3 = new Vector3(0, Random.Range(-.5f, .5f), 0);
+        GameObject newGO = Instantiate(armGameObjectReference);//, armGameObjectReference.transform.position, Quaternion.identity, GameManager.instance.shipController.transform));
+        armGameObjects.Add(newGO);
+        newGO.transform.position += tempVector3;
+        newGO.transform.Find("LineRenderMid").position += tempVector3;
+        newGO.transform.Find("LineRenderEnd").position += tempVector3;
+
+        newGO.GetComponent<ArmRenderer>().colliderTransform = GameManager.instance.shipController.gameObject.transform;
     }
 
     void ArmRender(Transform startPoint, Transform midPoint, Transform endPoint, Transform targetTransform)

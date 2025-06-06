@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Energy_Lower_Button_0: -7640287041173259236
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -26,8 +26,13 @@ public class DisplayManager : MonoBehaviour
     public TMP_Text detectorLevelText;
     public TMP_Text engineCostText, detectorCostText, tractorBeamCostText, researchCostText;
     public TMP_Text engineUpgradeCostText, engineUpgradeLevel;
-
-    
+    [Header("CoolDown Text")]
+    public TMP_Text engineCoolDownText;
+    public TMP_Text armCoolDownText;
+    public TMP_Text efficiencyCoolDownText;
+    public TMP_Text detectorCoolDownText;
+    public TMP_Text netCoolDownText;
+    public TMP_Text megaPhoneCoolDownText;
 
     [Header("Images")]
     public Image fuelImage;
@@ -38,12 +43,15 @@ public class DisplayManager : MonoBehaviour
     public Image upgradeButtonFillImage;
     public Image detectorFillImage;
     public Image tractorBeamFillImage;
+    public Image armFillImage;
 
     [Header("Upgrade FillImages")]
     public TMP_Text[] engineUpgradeTexts;
     public TMP_Text[] thrusterUpgradeTexts;
     public Image[] engineResearchFillImages;
     public Image[] thrusterResearchFillImages;
+
+    
 
     [Header("ResearchButtons")]
     public Button[] researchButtons;

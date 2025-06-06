@@ -166,7 +166,7 @@ public class AsteroidClicker : MonoBehaviour
                     }
                 }
             }
-            else if (armInstance.armEndPoint.position != armInstance.armMidPoint.position)
+            else if (armInstance.armEndPoint.position != armInstance.armRestingPoint.position)
             {
                 ArmRender(armInstance.armSpawnPoint, armInstance.armMidPoint, armInstance.armEndPoint, armInstance.armRestingPoint);
 
@@ -215,7 +215,11 @@ public class AsteroidClicker : MonoBehaviour
 
     void ArmRender(Transform startPoint, Transform midPoint, Transform endPoint, Transform targetTransform)
     {
-        endPoint.position = Vector3.MoveTowards(endPoint.position, targetTransform.position, armMoveSpeed);
+        var step = armMoveSpeed * Time.deltaTime;
+        Debug.Log("Step is: " + step);
+        //endPoint.position = Vector2.MoveTowards(new Vector2(endPoint.position.x, endPoint.position.y), new Vector2(targetTransform.position.x, targetTransform.position.y), step);
+        endPoint.position = new Vector3(Mathf.Lerp(10, 100, step), Mathf.Lerp(10, 100, step), 0);
+        //endPoint.position = Vector3.MoveTowards(endPoint.position, targetTransform.position, step);
         Vector3 Direction = targetTransform.position - endPoint.position;
         Vector3 Direction2 = Vector3.ProjectOnPlane(transform.forward, Direction);
         Quaternion rotation = Quaternion.LookRotation(Direction2, Direction);

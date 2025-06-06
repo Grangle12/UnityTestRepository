@@ -157,16 +157,15 @@ public class SpaceShipController : MonoBehaviour
             {
                 childOfPrefab.Find("Energy_0").gameObject.SetActive(true);
                 childOfPrefab.Find("gem2_green_0").gameObject.SetActive(false);
-                Debug.Log("I AM SUPPOSED TO BE WHITE");
+
             }
             else if (typeOfResource == "Gem1")
             {
                 childOfPrefab.Find("gem2_green_0").gameObject.SetActive(true);
-                Debug.Log("I found" + childOfPrefab.Find("gem2_green_0").gameObject);
+
 
                 childOfPrefab.Find("Energy_0").gameObject.SetActive(false);
-                Debug.Log("I found" + childOfPrefab.Find("Energy_0").gameObject);
-                Debug.Log("I AM SUPPOSED TO BE BLUE");
+
 
             }
         }

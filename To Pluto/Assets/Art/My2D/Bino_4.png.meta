@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 592d8b09054834041905332e147e3b87
+guid: 5de58dea70a0a3148a51db316649976c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7213742777133032008
-    second: Energy_0
+      213: 4062028145450999071
+    second: Bino_4_0
+  - first:
+      213: 5251662059804565711
+    second: Bino_4_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +49,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -96,43 +99,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Energy_0
+      name: Bino_4_0
       rect:
         serializedVersion: 2
-        x: 356
-        y: 150
-        width: 191
-        height: 283
+        x: 1719
+        y: 599
+        width: 451
+        height: 302
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +118,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8bd12fb0a23a3eb90800000000000000
-      internalID: -7213742777133032008
+      spriteID: f1dde35a3193f5830800000000000000
+      internalID: 4062028145450999071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bino_4_1
+      rect:
+        serializedVersion: 2
+        x: 1904
+        y: 567
+        width: 40
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc02c03a1d6a1e840800000000000000
+      internalID: 5251662059804565711
       vertices: []
       indices: 
       edges: []
@@ -151,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Energy_0: -7213742777133032008
+      Bino_4_0: 4062028145450999071
+      Bino_4_1: 5251662059804565711
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

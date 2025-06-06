@@ -56,6 +56,8 @@ public class BuildEngine : MonoBehaviour
             {
                 //NEED TO LOOK AT THIS *************************************************************************************
                 displayManager.iconFillImage.fillAmount = (timer / GameManager.instance.researchManager.GetPartUpgradeTime("Engine"));
+                
+                displayManager.engineCoolDownText.text = ((int)(GameManager.instance.researchManager.GetPartUpgradeTime("Engine") - timer)).ToString();
             }
             else if (partToBuild.GetType() == typeof(ThrusterPartSO))
             {
@@ -67,6 +69,7 @@ public class BuildEngine : MonoBehaviour
             {
                 //Debug.Log("we think its a tractorBeam");
                 displayManager.iconFillImage.fillAmount = (timer / partToBuild.buildUpgradeTime[GameManager.instance.shipController.tractorBeamCount]);
+                displayManager.netCoolDownText.text = ((int)(GameManager.instance.researchManager.GetPartUpgradeTime("Engine") - timer)).ToString();
             }
         }
         else if(currentlyUpgrading)
@@ -86,6 +89,7 @@ public class BuildEngine : MonoBehaviour
             {
                 //Debug.Log("we think its a tractorBeam");
                 displayManager.tractorBeamFillImage.fillAmount = (timer / partToBuild.buildUpgradeTime[GameManager.instance.shipController.tractorBeamCount]);
+
             }
         }     
         else if(currentlyUpgradingDetector)
@@ -119,6 +123,8 @@ public class BuildEngine : MonoBehaviour
             currentlyBuilding = true;
             //StartCoroutine(BuildEngineCoroutine(engine));
             StartCoroutine(BuildEngineCoroutine(GameManager.instance.shipController.enginePartSOReference));
+            
+            displayManager.engineCoolDownText.gameObject.SetActive(true);
             timer = 0;
             partToBuild = engine;
             displayManager.iconFillImage = displayManager.BuildEngineFillImage;
@@ -126,7 +132,27 @@ public class BuildEngine : MonoBehaviour
         }
         else
         {
-            Debug.Log("out of resources");
+            if(GameManager.instance.researchManager.GetPartCost("Engine") > GameManager.instance.shipController.resourceCount)
+            {
+                Debug.Log("its cost is :" + GameManager.instance.researchManager.GetPartCost("Engine") + " and we currently have: " + GameManager.instance.shipController.resourceCount);
+            }
+            if(currentlyBuilding)
+            {
+
+                Debug.Log("we're Currently Building");
+            }
+            if(GetCurrentEngineCount() >= GameManager.instance.shipController.engineCountMax)
+            {
+                Debug.Log("were currently above engine count max, which is: " + GetCurrentEngineCount());
+            }
+            if(currentlyUpgrading)
+            {
+                Debug.Log("we're Currently upgrading");
+            }
+            if(currentlyUpgradingDetector)
+            {
+                Debug.Log("we're Currently upgrading detector");
+            }
         }
         if(GetCurrentEngineCount() >= GameManager.instance.shipController.engineCountMax)
         {
@@ -167,7 +193,21 @@ public class BuildEngine : MonoBehaviour
 
     public void BuildArm()
     {
-        StartCoroutine(BuildArmCoroutine());
+        if (GameManager.instance.shipController.armPartSOReference.cost[GameManager.instance.GetComponent<AsteroidClicker>().armCount] <= GameManager.instance.shipController.resourceCount)
+        {
+            if (!currentlyBuilding && !currentlyUpgrading && !currentlyUpgradingDetector)
+            {
+                currentlyBuilding = true;
+                timer = 0;
+                StartCoroutine(BuildArmCoroutine());
+                partToBuild = GameManager.instance.shipController.armPartSOReference;
+                displayManager.iconFillImage = displayManager.armFillImage;
+            }
+        }
+        else
+        {
+            Debug.Log("Not enough resources, you need " + GameManager.instance.shipController.armPartSOReference.cost[GameManager.instance.GetComponent<AsteroidClicker>().armCount] + " resources.");
+        }
     }
 
     //This build creates an Engine Fuel Efficiency as well as a thruster
@@ -183,6 +223,7 @@ public class BuildEngine : MonoBehaviour
         GameManager.instance.shipController.enginePartSOList.Add(Instantiate(engine));
         GameManager.instance.shipController.thrusterPartSOList.Add(Instantiate(GameManager.instance.shipController.thrusterPartSOReference));
 
+        GameManager.instance.displayManager.engineCoolDownText.gameObject.SetActive(true);
         //Randomly offset the engine
         float randY = Random.Range(-0.5f, .5f);
         Debug.Log("Random number has stated: " + randY);
@@ -199,10 +240,13 @@ public class BuildEngine : MonoBehaviour
     {
         PartSO tractorBeam = GameManager.instance.shipController.tractorPartSOReference;
         Debug.Log("Building Tractor Beam: " + tractorBeam.buildUpgradeTime[GameManager.instance.shipController.tractorBeamCount]);
+
+        GameManager.instance.displayManager.netCoolDownText.gameObject.SetActive(true);
         GameManager.instance.shipController.resourceCount -= GameManager.instance.shipController.tractorPartSOReference.cost[GameManager.instance.shipController.tractorBeamCount];
 
-        yield return new WaitForSeconds(tractorBeam.buildUpgradeTime[GameManager.instance.shipController.tractorBeamCount]);                                                                                                                                                                                                                                                                                                                                                                                                                          
+        yield return new WaitForSeconds(tractorBeam.buildUpgradeTime[GameManager.instance.shipController.tractorBeamCount]);
 
+        GameManager.instance.displayManager.netCoolDownText.gameObject.SetActive(false);
         Debug.Log("Building Complete");
 
 
@@ -226,9 +270,10 @@ public class BuildEngine : MonoBehaviour
     IEnumerator BuildArmCoroutine()
     {
         PartSO armBuild = GameManager.instance.shipController.armPartSOReference;
-        Debug.Log("Building Tractor Beam: " + armBuild.buildUpgradeTime[GameManager.instance.GetComponent<AsteroidClicker>().armCount]);
+        Debug.Log("Building ARM. Please wait: " + armBuild.buildUpgradeTime[GameManager.instance.GetComponent<AsteroidClicker>().armCount]);
         GameManager.instance.shipController.resourceCount -= GameManager.instance.shipController.armPartSOReference.cost[GameManager.instance.GetComponent<AsteroidClicker>().armCount];
-
+        Debug.Log("we are removing: " + GameManager.instance.shipController.armPartSOReference.cost[GameManager.instance.GetComponent<AsteroidClicker>().armCount] + " from resource inventory");
+        Debug.Log("waiting for " + (armBuild.buildUpgradeTime[GameManager.instance.GetComponent<AsteroidClicker>().armCount]));
         yield return new WaitForSeconds(armBuild.buildUpgradeTime[GameManager.instance.GetComponent<AsteroidClicker>().armCount]);
 
         Debug.Log("Arm Building Complete");

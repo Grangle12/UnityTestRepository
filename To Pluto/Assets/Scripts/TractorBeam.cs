@@ -58,7 +58,7 @@ public class TractorBeam : MonoBehaviour
                 {
                     GameManager.instance.shipController.ShowFloatingText(fuelAmount.ToString(), Color.white, "Energy");
                     GameManager.instance.shipController.fuel += fuelAmount;
-                    Debug.Log("Gained : " + fuelAmount + " Fuel");
+                    //Debug.Log("Gained : " + fuelAmount + " Fuel");
 
                     
                 }
@@ -72,8 +72,8 @@ public class TractorBeam : MonoBehaviour
                 {
                     GameManager.instance.shipController.resourceCount += (int)(resource.rareResourceAmt);
                     GameManager.instance.shipController.ShowFloatingText(resource.rareResourceAmt.ToString(), Color.blue, "Gem1");
-                    Debug.Log("saying were blue here");
-                    Debug.Log("Gained : " + (int)(resource.rareResourceAmt) + " Resource");
+                    
+                
                 }
                 else if (resource.rareResourceAmt > 0)
                 {
